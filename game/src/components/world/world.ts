@@ -1,5 +1,5 @@
 import { Tile } from "./tile";
-import SimplexNoise from "../../../node_modules/simplex-noise/dist/cjs/simplex-noise";
+import SimplexNoise from "simplex-noise/dist/cjs/simplex-noise";
 import { NPC, npcInterface } from "../npc/npc";
 import { Building, buildingInterface } from "./building";
 import { Node, nodeInterface } from "./node";

@@ -4,7 +4,7 @@ import { Game } from './components/util/game';
 import { townCenter } from './components/defaults/builds';
 import { chest, tree } from './components/defaults/node';
 
-const game = new Game(64);
+const game = new Game(256);
 
 const main = async () => {
   game.init();
