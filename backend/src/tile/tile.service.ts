@@ -3,6 +3,8 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import "dotenv/config";
 import { TileEntity } from "./tile.entity";
+import { randomInt } from "crypto";
+import { Tile } from "./tile";
 
 @Injectable()
 export class TileService {
@@ -13,7 +15,7 @@ export class TileService {
     for(let i = 0; i < 10; i++){
       for(let j = 0; j < 10; j++){
         this.tileRepo.insert({
-          id: i*j,
+          id: randomInt(99999999),
           x: i,
           y: j
         });

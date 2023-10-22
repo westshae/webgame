@@ -9,4 +9,4 @@ import { TileController } from './tile.controller';
   controllers: [TileController],
   providers: [TileService]
 })
-export class AuthModule {}
+export class TileModule {}

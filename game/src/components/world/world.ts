@@ -8,6 +8,7 @@ import { selectorTexture } from "../util/textures";
 import { game } from "../..";
 import { townCenter } from "../defaults/builds";
 import { allItemsMap } from "../defaults/items";
+import axios from "axios";
 
 class World {
   container: Container;
@@ -30,13 +31,18 @@ class World {
 
     this.container = new Container();
     this.screenSize = this.spriteWidth * size * 5;
-    this.grid = this.generateGrid();
     this.npcMap = new Map<number, NPC>();
     this.buildMap = new Map<number, Building>();
+    this.grid = [];
 
     this.buildMode = false;
     this.selector = Sprite.from(selectorTexture);
     this.createSelector();
+    this.initialize();
+  }
+
+  async initialize(){
+    this.grid = await this.generateGrid();
   }
 
   toggleBuildMode() {
@@ -240,22 +246,28 @@ class World {
     this.resetAction(tile);
   }
 
-  generateGrid() {
+  async generateGrid() {
     let grid: Array<Array<Tile>> = [];
     const biome = new SimplexNoise(Math.random());
-    for (let width: number = 0; width < this.size; width++) {
-      grid[width] = [];
-      for (let height: number = 0; height < this.size; height++) {
-        grid[width][height] = new Tile(
-          width,
-          height,
-          biome.noise2D(width / 16, height / 16),
-          this.container
-        );
-      }
+
+    axios.post("http://localhost:5000/tile/createWorld");
+    const response = await axios.get("http://localhost:5000/tile/getWorld");
+
+    const worldData = response.data;
+
+    console.log(worldData);
+
+    for(let tileInfo of worldData){
+      console.log(tileInfo);
+      console.log("test");
+      let tile = new Tile(tileInfo.x, tileInfo.y, biome.noise2D(tileInfo.x/16, tileInfo.y/16), this.container);
+      grid[tileInfo.x][tileInfo.y] = tile;
+      console.log("ree");
     }
+
     return grid;
   }
+
 
   generateRandom(){
     const random = new SimplexNoise(Math.random());

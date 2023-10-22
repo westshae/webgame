@@ -46,5 +46,8 @@ module.exports = {
         // Hot-reloading, the sole reason to use webpack here <3
         hot: true,
         writeToDisk: true,
+        proxy: {
+            '/api': 'http://localhost:5000', // Replace with your back-end API URL
+          },
     },
 }

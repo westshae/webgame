@@ -1,4 +1,4 @@
-class Tile {
+export class Tile {
   id: number;
   x: number;
   y: number;
