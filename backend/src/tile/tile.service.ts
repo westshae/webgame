@@ -5,6 +5,7 @@ import "dotenv/config";
 import { TileEntity } from "./tile.entity";
 import { randomInt } from "crypto";
 import { Tile } from "./tile";
+import { createNoise2D } from 'simplex-noise';
 
 @Injectable()
 export class TileService {
@@ -12,13 +13,16 @@ export class TileService {
   private readonly tileRepo: Repository<TileEntity>;
 
   generateWorld(){
+    const biome = createNoise2D();
+
     for(let i = 0; i < 10; i++){
       for(let j = 0; j < 10; j++){
         this.tileRepo.insert({
           id: randomInt(99999999),
           x: i,
           y: j,
-          population: 0
+          population: 0,
+          biome: biome(i/16, j/16)
         });
       }
     }
@@ -27,8 +31,9 @@ export class TileService {
   async loadWorld(){
     let tiles = [];
     let foundTiles:TileEntity[] = await this.tileRepo.find();
+
     for(let tileInfo of foundTiles){
-      const tile = new Tile(tileInfo.id, tileInfo.x, tileInfo.y, tileInfo.population);
+      const tile = new Tile(tileInfo.id, tileInfo.x, tileInfo.y, tileInfo.population, tileInfo.biome);
       tiles.push(tile);
     }
 

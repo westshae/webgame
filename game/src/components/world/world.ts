@@ -29,13 +29,12 @@ class World {
 
   async loadWorld() {
     this.grid = [];
-    const biome = new SimplexNoise(Math.random());
 
     // axios.post("http://localhost:5000/tile/createWorld");
     const response = await axios.get("http://localhost:5000/tile/getWorld");
 
     for(let tileInfo of response.data){
-      let tile = new Tile(tileInfo.x, tileInfo.y, biome.noise2D(tileInfo.x/16, tileInfo.y/16), this.container);
+      let tile = new Tile(tileInfo.x, tileInfo.y, tileInfo.biome, this.container);
       console.log(tileInfo.population);
 
       if (!this.grid[tileInfo.x]) {

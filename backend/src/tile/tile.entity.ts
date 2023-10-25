@@ -2,15 +2,18 @@ import { Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity()
 export class TileEntity {
-    @PrimaryColumn()
+    @PrimaryColumn('integer')
     id: number;
 
-    @Column()
+    @Column('integer')
     x: number;
 
-    @Column()
+    @Column('integer')
     y: number;
 
-    @Column()
+    @Column('integer')
     population: number;
+
+    @Column('numeric')
+    biome: number;
 } 
