@@ -19,10 +19,15 @@ class World {
     this.container = new Container();
     this.screenSize = this.spriteWidth * size * 5;
 
-    this.generateGrid().then(() => this.render());
+    this.loadWorld().then(() => this.render());
+    setInterval(() => {
+      this.loadWorld().then(() => this.render());
+
+    }, 15000);
+
   }
 
-  async generateGrid() {
+  async loadWorld() {
     this.grid = [];
     const biome = new SimplexNoise(Math.random());
 
@@ -31,6 +36,7 @@ class World {
 
     for(let tileInfo of response.data){
       let tile = new Tile(tileInfo.x, tileInfo.y, biome.noise2D(tileInfo.x/16, tileInfo.y/16), this.container);
+      console.log(tileInfo.population);
 
       if (!this.grid[tileInfo.x]) {
         this.grid[tileInfo.x] = [];

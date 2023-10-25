@@ -10,4 +10,7 @@ export class TileEntity {
 
     @Column()
     y: number;
+
+    @Column()
+    population: number;
 } 

@@ -1,6 +1,6 @@
 import { Game } from './components/util/game';
 
-const game = new Game(256);
+const game = new Game(64);
 
 const main = async () => {
   game.init();
