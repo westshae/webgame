@@ -19,18 +19,24 @@ class World {
     this.container = new Container();
     this.screenSize = this.spriteWidth * size * 5;
 
-    this.loadWorld().then(() => this.render());
+    this.generateWorld();
     setInterval(() => {
-      this.loadWorld().then(() => this.render());
+      this.loadWorld();
 
     }, 15000);
 
   }
 
+  async generateWorld(){
+    await axios.post("http://localhost:5000/tile/createWorld", {
+      size: 8
+    });
+    this.loadWorld();
+  }
+
   async loadWorld() {
     this.grid = [];
 
-    // axios.post("http://localhost:5000/tile/createWorld");
     const response = await axios.get("http://localhost:5000/tile/getWorld");
 
     for(let tileInfo of response.data){
@@ -42,6 +48,7 @@ class World {
       }
       this.grid[tileInfo.x][tileInfo.y] = tile;
     }
+    this.render();
   }
 
   render() {

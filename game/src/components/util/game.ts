@@ -1,6 +1,7 @@
 import { Application } from 'pixi.js';
 import { World } from '../world/world';
 import { displayInit } from './display';
+import { Decision } from '../decision/decision';
 
 class Game {
   app: Application;
@@ -13,6 +14,7 @@ class Game {
 
   init() {
     displayInit(); //Initiates display
+    let decision = new Decision();
   }
 }
 

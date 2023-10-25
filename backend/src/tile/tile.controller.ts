@@ -6,9 +6,9 @@ export class TileController {
   constructor(private readonly tileService: TileService) {}
 
   @Post("createWorld")
-  post(@Query() query){
+  post(@Query('size') size: number){
     try{
-      this.tileService.generateWorld();
+      this.tileService.generateWorld(16);
     }catch(e){
       console.error(e);
     }

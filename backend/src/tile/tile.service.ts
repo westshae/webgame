@@ -12,18 +12,23 @@ export class TileService {
   @InjectRepository(TileEntity)
   private readonly tileRepo: Repository<TileEntity>;
 
-  generateWorld(){
+  async generateWorld(size:number){
+    const tiles = await this.tileRepo.find();
+    await this.tileRepo.remove(tiles);
+
     const biome = createNoise2D();
 
-    for(let i = 0; i < 10; i++){
-      for(let j = 0; j < 10; j++){
+    let count = 0;
+    for(let i = 0; i < size; i++){
+      for(let j = 0; j < size; j++){
         this.tileRepo.insert({
-          id: randomInt(99999999),
+          id: count,
           x: i,
           y: j,
           population: 0,
           biome: biome(i/16, j/16)
         });
+        count++;
       }
     }
   }

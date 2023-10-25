@@ -13,7 +13,7 @@ class Tile {
     this.y = y;
     this.q = x - (y - (y&1)) / 2;
     this.r = y;
-    this.sprite = this.handleSprite(biome);    
+    this.sprite = this.handleSprite(biome);
 
     this.sprite.interactive = true;
 
