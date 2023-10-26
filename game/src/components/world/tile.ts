@@ -16,6 +16,8 @@ class Tile {
     this.sprite = this.handleSprite(biome);
 
     this.sprite.interactive = true;
+    this.sprite.on("pointerdown", () => this.handleTileInfo());
+
 
     container.addChild(this.sprite);
   }
@@ -28,6 +30,10 @@ class Tile {
     }else{
       return Sprite.from(grassTexture)
     }
+  }
+
+  handleTileInfo(){
+    console.log(this.x + ":" + this.y);
   }
 }
 
