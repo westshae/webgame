@@ -14,7 +14,7 @@ class Game {
 
   init() {
     displayInit(); //Initiates display
-    let decision = new Decision();
+    let decision = new Decision(this.app.stage);
   }
 }
 
