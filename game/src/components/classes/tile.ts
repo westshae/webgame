@@ -46,6 +46,9 @@ class Tile {
     if(!(this.recentMouseX == event.data.originalEvent.clientX && this.recentMouseY == event.data.originalEvent.clientY)){
       return;
     }
+    if(this.infobox != null){
+      return;
+    }
     this.infobox = new Container();
     this.infobox.setTransform(this.sprite.x + 50, this.sprite.y-50)
     let closeButton = new Graphics();
@@ -67,6 +70,7 @@ class Tile {
 
   handleClose(){
     this.stage.removeChild(this.infobox);
+    this.infobox = null;
   }
 
 }
