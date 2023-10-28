@@ -1,7 +1,9 @@
 import { Container, Graphics, Sprite, Text } from "pixi.js";
-import { grassTexture, sandTexture, waterTexture } from "../util/textures";
+import { grassTexture, sandTexture, waterTexture } from "../handlers/texturesHandler";
 
 class Tile {
+  recentMouseX:number;
+  recentMouseY:number;
   x: number;
   y: number;
   q: number;
@@ -18,7 +20,8 @@ class Tile {
     this.sprite = this.handleSprite(biome);
 
     this.sprite.interactive = true;
-    this.sprite.on("pointerdown", () => this.handleTileInfo());
+    this.sprite.on("pointerdown", (event) => this.handlePointerDown(event));
+    this.sprite.on("pointerup", (event) => this.handleTileInfo(event));
 
     this.stage = stage;
     stage.addChild(this.sprite);
@@ -34,42 +37,38 @@ class Tile {
     }
   }
 
-  handleTileInfo() {
-    console.log(this.x + ":" + this.y);
+  handlePointerDown(event){
+    this.recentMouseX = event.data.originalEvent.clientX;
+    this.recentMouseY = event.data.originalEvent.clientY;
+  }
+
+  handleTileInfo(event) {
+    if(!(this.recentMouseX == event.data.originalEvent.clientX && this.recentMouseY == event.data.originalEvent.clientY)){
+      return;
+    }
     this.infobox = new Container();
     this.infobox.setTransform(this.sprite.x + 50, this.sprite.y-50)
     let closeButton = new Graphics();
-    // let noButton = new Graphics();
 
-    //Draws button
     closeButton.beginFill(0x900000);
-    // noButton.beginFill(0x900000);
 
     closeButton.drawCircle(40, 40, 20);
-    // noButton.drawCircle(80, 40, 20);
 
-    //Turns button into button
     closeButton.interactive = true;
-    // noButton.interactive = true;
 
     closeButton.on("pointerdown", () => this.handleClose());
-    // noButton.on("pointerdown", () => this.handleSecondOption());
 
     let text: Text = new Text("INFO HERE");
 
     this.infobox.addChild(text);
-    this.infobox.addChild(text);
-    this.infobox.addChild(text);
-    this.infobox.addChild(text);
-    this.infobox.addChild(text);
     this.infobox.addChild(closeButton);
-    // this.infobox.addChild(noButton);
     this.stage.addChild(this.infobox);
   }
 
   handleClose(){
     this.stage.removeChild(this.infobox);
   }
+
 }
 
 export { Tile };

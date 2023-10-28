@@ -1,30 +1,19 @@
-import { Tile } from "./tile";
-import SimplexNoise from "simplex-noise/dist/cjs/simplex-noise";
-import { Container, Sprite } from "pixi.js";
+import { Tile } from "../classes/tile";
+import { Container } from "pixi.js";
 import axios from "axios";
 
-class World {
+class WorldHandler {
   container: Container;
   grid: Array<Array<Tile>>;
-  size: number;
   screenSize: number;
   spriteWidth: number;
   spriteHeight: number;
 
-  constructor(size: number) {
-    this.size = size;
+  constructor() {
     this.spriteWidth = Math.sqrt(3) * 50;
     this.spriteHeight = 2 * 50;
 
     this.container = new Container();
-    this.screenSize = this.spriteWidth * size * 5;
-
-    this.generateWorld();
-    setInterval(() => {
-      this.loadWorld();
-
-    }, 15000);
-
   }
 
   async generateWorld(){
@@ -76,4 +65,4 @@ class World {
   }
 }
 
-export { World };
+export { WorldHandler };

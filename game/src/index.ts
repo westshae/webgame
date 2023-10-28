@@ -1,11 +1,10 @@
-import { Game } from './components/util/game';
+import { GameHandler } from './components/handlers/gameHandler';
 
-const game = new Game(64);
+const game = new GameHandler();
 
 const main = async () => {
   game.init();
-  
-  game.world.render();
+  game.render();
 };
 
 main();

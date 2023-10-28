@@ -1,5 +1,4 @@
 import { Container, Graphics, Text } from "pixi.js";
-import { grassTexture, sandTexture, waterTexture } from "../util/textures";
 import axios from "axios";
 
 class Decision {
@@ -8,19 +7,10 @@ class Decision {
   stage: Container;
   decision: Container;
 
-  constructor(stage:Container) {
+  constructor(id:number, question:string, stage:Container) {
     this.stage = stage;
-    this.getDecision();
-    setInterval(() => {
-      this.presentDecision();
-    }, 15000);
-
-  }
-
-  async getDecision(){
-    const response = await axios.get("http://localhost:5000/decision/getDecision");
-    this.id = response.data.id;
-    this.question = response.data.question;
+    this.id = id;
+    this.question = question;
   }
 
   async presentDecision() {
