@@ -8,7 +8,7 @@ export class TileController {
   @Post("createWorld")
   post(@Query('size') size: number){
     try{
-      this.tileService.generateWorld(64);
+      this.tileService.generateWorld(16);
     }catch(e){
       console.error(e);
     }

@@ -28,7 +28,7 @@ class WorldHandler {
     const response = await axios.get("http://localhost:5000/tile/getWorld");
 
     for(let tileInfo of response.data){
-      let tile = new Tile(tileInfo.x, tileInfo.y, tileInfo.biome, this.container);
+      let tile = new Tile(tileInfo.x, tileInfo.y, tileInfo.population, tileInfo.farmland, tileInfo.farmlandUtilized, tileInfo.biome, this.container);
       console.log(tileInfo.population);
 
       if (!this.grid[tileInfo.x]) {

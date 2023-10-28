@@ -19,7 +19,7 @@ class GameHandler {
 
   init(){
     this.worldHandler.generateWorld();
-    this.decisionHandler.refreshDecisionHolder();
+    this.tick();
 
     setInterval(() => {
       this.tick();
