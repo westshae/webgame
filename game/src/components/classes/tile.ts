@@ -2,15 +2,15 @@ import { Container, Graphics, Sprite, Text } from "pixi.js";
 import { grassTexture, sandTexture, waterTexture } from "../handlers/texturesHandler";
 
 class Tile {
-  recentMouseX:number;
-  recentMouseY:number;
+  recentMouseX:number | undefined;
+  recentMouseY:number | undefined;
   x: number;
   y: number;
   q: number;
   r: number;
   sprite: Sprite;
   stage: Container;
-  infobox: Container;
+  infobox: Container | null;
 
   constructor(x: number, y: number, biome: number, stage: Container) {
     this.x = x;
@@ -20,8 +20,9 @@ class Tile {
     this.sprite = this.handleSprite(biome);
 
     this.sprite.interactive = true;
-    this.sprite.on("pointerdown", (event) => this.handlePointerDown(event));
-    this.sprite.on("pointerup", (event) => this.handleTileInfo(event));
+    this.sprite.on("pointerdown", (event: any) => this.handlePointerDown(event));
+    this.sprite.on("pointerup", (event: any) => this.handleTileInfo(event));
+    this.infobox = null;
 
     this.stage = stage;
     stage.addChild(this.sprite);
@@ -37,12 +38,12 @@ class Tile {
     }
   }
 
-  handlePointerDown(event){
+  handlePointerDown(event: { data: { originalEvent: { clientX: number | undefined; clientY: number | undefined; }; }; }){
     this.recentMouseX = event.data.originalEvent.clientX;
     this.recentMouseY = event.data.originalEvent.clientY;
   }
 
-  handleTileInfo(event) {
+  handleTileInfo(event: { data: { originalEvent: { clientX: number | undefined; clientY: number | undefined; }; }; }) {
     if(!(this.recentMouseX == event.data.originalEvent.clientX && this.recentMouseY == event.data.originalEvent.clientY)){
       return;
     }
@@ -69,6 +70,9 @@ class Tile {
   }
 
   handleClose(){
+    if(this.infobox == null){
+      return;
+    }
     this.stage.removeChild(this.infobox);
     this.infobox = null;
   }

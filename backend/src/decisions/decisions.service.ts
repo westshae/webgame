@@ -29,4 +29,15 @@ export class DecisionService {
   finishDecision(optionNumber:number, questionId:number){
     this.tileService.updateTilePopulation(optionNumber);
   }
+
+  async getAllDecisions(){
+    let entities = await this.decisionRepo.find();
+    let decisions:Decision[] = [];
+    for(let entity of entities){
+      let decision = new Decision(entity.id, entity.question);
+      decisions.push(decision);
+    }
+    return decisions;
+
+  }
 }

@@ -5,7 +5,7 @@ class Decision {
   id: number;
   question: string;
   stage: Container;
-  decision: Container;
+  decision: Container | undefined;
 
   constructor(id:number, question:string, stage:Container) {
     this.stage = stage;
@@ -44,6 +44,9 @@ class Decision {
   }
 
   handleFirstOption(){
+    if(this.decision == undefined){
+      return;
+    }
     this.stage.removeChild(this.decision);
 
     axios.post("http://localhost:5000/decision/finishDecision", {
@@ -56,6 +59,10 @@ class Decision {
   }
 
   handleSecondOption(){
+    if(this.decision == undefined){
+      return;
+    }
+
     this.stage.removeChild(this.decision);
 
     axios.post("http://localhost:5000/decision/finishDecision", {

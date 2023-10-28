@@ -6,7 +6,7 @@ export class DecisionController {
   constructor(private readonly decisionService: DecisionService) {}
 
   @Post("finishDecision")
-  post(@Body() data: { option: number, questionId: number }){
+  finishDecision(@Body() data: { option: number, questionId: number }){
     try{
       this.decisionService.finishDecision(data.option, data.questionId)
     }catch(e){
@@ -15,9 +15,25 @@ export class DecisionController {
   }
 
   @Get("getDecision")
-  async get(){
+  async getDecision(){
     try{
       return await this.decisionService.getDecisionFromQueue();
+    }catch(e){
+      console.error(e);
+    }
+  }
+
+  @Get("getDecisions")
+  async getDecisions(){
+    try{
+      await this.decisionService.addDecisionToQueue("tsasdasd");
+      await this.decisionService.addDecisionToQueue("tsasdasd");
+      await this.decisionService.addDecisionToQueue("tsasdasd");
+      await this.decisionService.addDecisionToQueue("tsasdasd");
+      await this.decisionService.addDecisionToQueue("tsasdasd");
+      await this.decisionService.addDecisionToQueue("tsasdasd");
+
+      return await this.decisionService.getAllDecisions();
     }catch(e){
       console.error(e);
     }

@@ -4,8 +4,7 @@ import axios from "axios";
 
 class WorldHandler {
   container: Container;
-  grid: Array<Array<Tile>>;
-  screenSize: number;
+  grid: Array<Array<Tile>> | undefined;
   spriteWidth: number;
   spriteHeight: number;
 
@@ -20,7 +19,7 @@ class WorldHandler {
     await axios.post("http://localhost:5000/tile/createWorld", {
       size: 8
     });
-    this.loadWorld();
+    await this.loadWorld();
   }
 
   async loadWorld() {
@@ -41,6 +40,9 @@ class WorldHandler {
   }
 
   render() {
+    if(this.grid == undefined){
+      return;
+    }
     for (let value of this.grid) {
       for (let tile of value) {
         tile.sprite.width = this.spriteWidth;

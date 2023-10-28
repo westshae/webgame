@@ -11,14 +11,15 @@ class GameHandler {
 
   constructor() {
     this.app = new Application();
-    this.worldHandler = new WorldHandler();
     this.decisionHandler = new DecisionHandler(this.app.stage);
+    this.worldHandler = new WorldHandler();
     this.displayHandler = new DisplayHandler();
 
   }
 
   init(){
     this.worldHandler.generateWorld();
+    this.decisionHandler.refreshDecisionHolder();
 
     setInterval(() => {
       this.tick();
@@ -26,8 +27,9 @@ class GameHandler {
   }
 
   tick(){
-    this.decisionHandler.loadDecisions();
     this.worldHandler.loadWorld();
+    this.decisionHandler.loadDecisions();
+    this.decisionHandler.refreshDecisionHolder();
   }
 
   render(){
