@@ -44,13 +44,10 @@ class DecisionHandler {
     this.decisionHolder = new Container();
     let getDecisionButton = new Graphics();
 
-
-    //Draws button
     getDecisionButton.beginFill(0x900000);
 
     getDecisionButton.drawCircle(40, 40, 20);
 
-    //Turns button into button
     getDecisionButton.interactive = true;
 
     getDecisionButton.on("pointerdown", () => this.getFirstDecision().presentDecision());
