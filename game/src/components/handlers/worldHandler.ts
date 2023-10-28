@@ -17,7 +17,7 @@ class WorldHandler {
 
   async generateWorld(){
     await axios.post("http://localhost:5000/tile/createWorld", {
-      size: 8
+      size: 32
     });
     await this.loadWorld();
   }
@@ -40,6 +40,7 @@ class WorldHandler {
   }
 
   render() {
+    let gapPixels = this.spriteWidth/20;
     if(this.grid == undefined){
       return;
     }
@@ -54,13 +55,13 @@ class WorldHandler {
 
         if (yindex % 2 == 0) {
           //If even line
-          tile.sprite.x = tile.x * this.spriteWidth + this.spriteWidth / 2;
-          tile.sprite.y = yindex * this.spriteHeight - heightOffset;
+          tile.sprite.x = tile.x * this.spriteWidth + this.spriteWidth / 2 + (tile.x * gapPixels) + gapPixels/2;
+          tile.sprite.y = yindex * this.spriteHeight - heightOffset + (yindex * gapPixels); 
         } else {
           //If odd line
-          tile.sprite.x = tile.x * this.spriteWidth;
+          tile.sprite.x = tile.x * this.spriteWidth + (tile.x * gapPixels);
           tile.sprite.y =
-            yindex * this.spriteHeight + this.spriteHeight / 4 - heightOffset;
+            yindex * this.spriteHeight + this.spriteHeight / 4 - heightOffset + (yindex * gapPixels);
         }
       }
     }

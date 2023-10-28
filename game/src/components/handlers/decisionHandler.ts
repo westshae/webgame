@@ -49,7 +49,7 @@ class DecisionHandler {
 
     getDecisionButton.beginFill(0x9900);
 
-    getDecisionButton.drawCircle(40, 40, 40);
+    getDecisionButton.drawCircle(120, 40, 20);
 
     getDecisionButton.interactive = true;
 
