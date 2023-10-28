@@ -26,7 +26,9 @@ export class TileService {
           x: i,
           y: j,
           population: 0,
-          biome: biome(i/16, j/16)
+          biome: biome(i/16, j/16),
+          farmland: randomInt(10),
+          farmlandUtitized: randomInt(100)
         });
         count++;
       }
@@ -38,7 +40,7 @@ export class TileService {
     let foundTiles:TileEntity[] = await this.tileRepo.find();
 
     for(let tileInfo of foundTiles){
-      const tile = new Tile(tileInfo.id, tileInfo.x, tileInfo.y, tileInfo.population, tileInfo.biome);
+      const tile = new Tile(tileInfo.id, tileInfo.x, tileInfo.y, tileInfo.population, tileInfo.biome, tileInfo.farmland, tileInfo.farmlandUtitized);
       tiles.push(tile);
     }
 
