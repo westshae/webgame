@@ -19,6 +19,7 @@ class GameHandler {
 
   init(){
     this.worldHandler.generateWorld();
+    this.worldHandler.loadWorld();
     this.tick();
 
     setInterval(() => {
@@ -27,7 +28,7 @@ class GameHandler {
   }
 
   tick(){
-    this.worldHandler.loadWorld();
+    this.worldHandler.updateWorldValues();
     this.decisionHandler.loadDecisions();
     this.decisionHandler.refreshDecisionHolder();
   }

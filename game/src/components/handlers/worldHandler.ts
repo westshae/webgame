@@ -39,6 +39,28 @@ class WorldHandler {
     this.render();
   }
 
+  async updateWorldValues(){
+    if(this.grid == undefined){
+      return;
+    }
+    const response = await axios.get("http://localhost:5000/tile/getWorld");
+
+    for(let tileInfo of response.data){
+      let tile = this.grid[tileInfo.x][tileInfo.y];
+
+      tile.population = tileInfo.population;
+      tile.farmland = tileInfo.farmland;
+      tile.farmlandUtilized = tileInfo.farmlandUtilized;
+      tile.biome = tileInfo.biome;
+
+      if (!this.grid[tileInfo.x]) {
+        this.grid[tileInfo.x] = [];
+      }
+      this.grid[tileInfo.x][tileInfo.y] = tile;
+    }
+
+  }
+
   render() {
     let gapPixels = this.spriteWidth/20;
     if(this.grid == undefined){
