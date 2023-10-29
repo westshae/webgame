@@ -26,13 +26,6 @@ export class DecisionController {
   @Get("getDecisions")
   async getDecisions(){
     try{
-      await this.decisionService.addDecisionToQueue("tsasdasd");
-      await this.decisionService.addDecisionToQueue("tsasdasd");
-      await this.decisionService.addDecisionToQueue("tsasdasd");
-      await this.decisionService.addDecisionToQueue("tsasdasd");
-      await this.decisionService.addDecisionToQueue("tsasdasd");
-      await this.decisionService.addDecisionToQueue("tsasdasd");
-
       return await this.decisionService.getAllDecisions();
     }catch(e){
       console.error(e);

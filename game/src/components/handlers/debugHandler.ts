@@ -79,14 +79,15 @@ class DebugHandler {
   }
 
   handleGenerateNewWorld(){
-    this.game.worldHandler.generateWorld();
-    this.game.worldHandler.render();
+    this.game.worldHandler.generateWorld().then(()=>{
+      this.game.worldHandler.render();
+    });
   }
 
   async handleTickLoop(){
-    await axios.post("http://localhost:5000/gameloop/startGameloop");
-
-    this.game.beginLoop();
+    await axios.post("http://localhost:5000/gameloop/startGameloop").then(() =>{
+      this.game.beginLoop();
+    })
   }
 
   handleSetPlayer1(){

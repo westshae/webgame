@@ -1,8 +1,8 @@
 export class Decision {
-  id: number;
+  id: string;
   question: string;
 
-  constructor(id: number, question:string) {
+  constructor(id: string, question:string) {
       this.id = id;
       this.question = question;
   }
