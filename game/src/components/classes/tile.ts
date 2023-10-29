@@ -15,6 +15,10 @@ class Tile {
   farmland:number;
   farmlandUtilized:number;
   biome:string;
+  spriteWidth: number;
+  spriteHeight: number;
+  gapPixels: number;
+
 
   constructor(x: number, y: number, population:number, farmland:number, farmlandUtilized:number, biome: string, stage: Container) {
     this.x = x;
@@ -28,6 +32,11 @@ class Tile {
     this.farmlandUtilized = farmlandUtilized;
     this.biome = biome;
 
+    this.spriteWidth = Math.sqrt(3) * 50;
+    this.spriteHeight = 2 * 50;
+    this.gapPixels = this.spriteWidth/20;
+
+
     this.sprite.interactive = true;
     this.sprite.on("pointerdown", (event: any) => this.handlePointerDown(event));
     this.sprite.on("pointerup", (event: any) => this.handleTileInfo(event));
@@ -35,6 +44,27 @@ class Tile {
 
     this.stage = stage;
     stage.addChild(this.sprite);
+  }
+
+  render(){
+    this.sprite.width = this.spriteWidth;
+    this.sprite.height = this.spriteHeight;
+
+    let yindex = this.y - 1;
+    let heightOffset =
+      (this.spriteHeight / 2) * (Math.round(yindex / 2) - 2);
+
+    if (yindex % 2 == 0) {
+      //If even line
+      this.sprite.x = this.x * this.spriteWidth + this.spriteWidth / 2 + (this.x * this.gapPixels) + this.gapPixels/2;
+      this.sprite.y = yindex * this.spriteHeight - heightOffset + (yindex * this.gapPixels); 
+    } else {
+      //If odd line
+      this.sprite.x = this.x * this.spriteWidth + (this.x * this.gapPixels);
+      this.sprite.y =
+        yindex * this.spriteHeight + this.spriteHeight / 4 - heightOffset + (yindex * this.gapPixels);
+    }
+
   }
 
   handleSprite(biome: string) {
