@@ -11,7 +11,6 @@ class GameHandler {
   decisionHandler: DecisionHandler;
   displayHandler: DisplayHandler;
   debugHandler: DebugHandler;
-  userID: number;
   userHandler: UserHandler;
 
   constructor() {
@@ -21,8 +20,6 @@ class GameHandler {
     this.worldHandler = new WorldHandler();
     this.displayHandler = new DisplayHandler();
     this.userHandler = new UserHandler();
-    this.userID = 1;
-    this.userHandler.doesUserExist(this.userID);
   }
 
   init(){

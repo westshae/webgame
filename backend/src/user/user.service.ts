@@ -9,8 +9,17 @@ export class UserService {
   @InjectRepository(UserEntity)
   private readonly userRepo: Repository<UserEntity>;
   
-  async doesUserExist(userID: number){
-    let entity = await this.userRepo.findOne(userID);
+  initUser(userId:number){
+    if(!this.doesUserExist(userId)){
+      this.userRepo.insert({
+        id:userId,
+        hasCapital: false,
+       });
+    }
+  }
+
+  async doesUserExist(userId: number){
+    let entity = await this.userRepo.findOne(userId);
     return (entity != null);
   }
 }

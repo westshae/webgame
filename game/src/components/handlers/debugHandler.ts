@@ -91,11 +91,11 @@ class DebugHandler {
   }
 
   handleSetPlayer1(){
-    this.game.userID = 1;
+    this.game.userHandler.userId = 1;
   }
 
   handleSetPlayer2(){
-    this.game.userID = 2;
+    this.game.userHandler.userId = 2;
   }
 
 }

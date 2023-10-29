@@ -67,11 +67,6 @@ export class TileService {
     for (let tileInfo of foundTiles) {
       tileInfo.population = tileInfo.population + amount;
     }
-
     await this.tileRepo.save(foundTiles);
-  }
-
-  addUserToWorld(userID: number){
-
   }
 }
