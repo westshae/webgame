@@ -29,7 +29,7 @@ class WorldHandler {
       this.grid = [];
       for(let tileInfo of response.data){
         let tile = new Tile(tileInfo.x, tileInfo.y, tileInfo.population, tileInfo.farmland, tileInfo.farmlandUtilized, tileInfo.biome, this.container);
-        console.log(tileInfo.population);
+        console.log(tileInfo.ownerUserId);
   
         if (!this.grid[tileInfo.x]) {
           this.grid[tileInfo.x] = [];

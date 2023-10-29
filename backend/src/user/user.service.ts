@@ -4,6 +4,7 @@ import { UserEntity } from "./user.entity";
 import { Repository } from "typeorm";
 import "dotenv/config";
 import { TileService } from "src/tile/tile.service";
+import { response } from "express";
 
 @Injectable()
 export class UserService {
@@ -11,20 +12,20 @@ export class UserService {
 
   @InjectRepository(UserEntity)
   private readonly userRepo: Repository<UserEntity>;
-  
-  initUser(userId:number){
-    if(!this.doesUserExist(userId)){
-      this.tileService.getRandomCapitalTile(userId).then((response)=>{
-        this.userRepo.insert({
-          id:userId,
-          capitalId: response.id
-         });  
-      })
+
+  async initUser(userId: number) {
+    const userExists = await this.doesUserExist(userId);
+    if (!userExists) {
+      const tile = await this.tileService.getRandomCapitalTile(userId);
+      this.userRepo.insert({
+        id: userId,
+        capitalId: tile.id,
+      });
     }
   }
 
-  async doesUserExist(userId: number){
-    let entity = await this.userRepo.findOne(userId);
-    return (entity != null);
+  async doesUserExist(userId: number) {
+    const response = await this.userRepo.findOne(userId);
+    return response !== undefined;
   }
 }
