@@ -6,6 +6,7 @@ import { AuthModule } from "./auth/auth.module";
 import { TileModule } from "./tile/tile.module";
 import { GameloopModule } from "./gameloop/gameloop.module";
 import { DecisionModule } from "./decisions/decisions.module";
+import { UserModule } from "./user/user.module";
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { DecisionModule } from "./decisions/decisions.module";
     TileModule,
     GameloopModule,
     DecisionModule,
+    UserModule
   ],
   providers: [],
 })

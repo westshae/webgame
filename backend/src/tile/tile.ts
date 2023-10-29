@@ -6,8 +6,9 @@ export class Tile {
   biome: string;
   farmland: number;
   farmlandUtilized: number;
+  ownerUserId: number | null;
 
-  constructor(id: number, x: number, y: number, population: number, biome: string, farmland: number, farmlandUtilized: number) {
+  constructor(id: number, x: number, y: number, population: number, biome: string, farmland: number, farmlandUtilized: number, ownerUserId: number | null) {
       this.id = id;
       this.x = x;
       this.y = y;
@@ -15,5 +16,6 @@ export class Tile {
       this.biome = biome;
       this.farmland = farmland;
       this.farmlandUtilized = farmlandUtilized;
+      this.ownerUserId = ownerUserId;
   }
 }

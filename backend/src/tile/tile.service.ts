@@ -28,7 +28,8 @@ export class TileService {
           population: 0,
           type: this.determineBiome(i,j, noise),
           farmland: randomInt(10),
-          farmlandUtitized: randomInt(100)
+          farmlandUtitized: randomInt(100),
+          ownerUserId: null
         });
         count++;
       }
@@ -40,7 +41,7 @@ export class TileService {
     let foundTiles:TileEntity[] = await this.tileRepo.find();
 
     for(let tileInfo of foundTiles){
-      const tile = new Tile(tileInfo.id, tileInfo.x, tileInfo.y, tileInfo.population, tileInfo.type, tileInfo.farmland, tileInfo.farmlandUtitized);
+      const tile = new Tile(tileInfo.id, tileInfo.x, tileInfo.y, tileInfo.population, tileInfo.type, tileInfo.farmland, tileInfo.farmlandUtitized, tileInfo.ownerUserId);
       tiles.push(tile);
     }
 
@@ -64,11 +65,13 @@ export class TileService {
     let foundTiles: TileEntity[] = await this.tileRepo.find();
 
     for (let tileInfo of foundTiles) {
-      // Increment the population value for each tile
       tileInfo.population = tileInfo.population + amount;
     }
 
-    // Save the updated entities back to the repository
     await this.tileRepo.save(foundTiles);
+  }
+
+  addUserToWorld(userID: number){
+
   }
 }

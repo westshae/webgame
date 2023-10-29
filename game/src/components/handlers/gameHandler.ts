@@ -3,6 +3,7 @@ import { WorldHandler } from './worldHandler';
 import { DecisionHandler } from './decisionHandler';
 import { DisplayHandler } from './displayHandler';
 import { DebugHandler } from './debugHandler';
+import { UserHandler } from './userHandler';
 
 class GameHandler {
   app: Application;
@@ -11,6 +12,7 @@ class GameHandler {
   displayHandler: DisplayHandler;
   debugHandler: DebugHandler;
   userID: number;
+  userHandler: UserHandler;
 
   constructor() {
     this.app = new Application();
@@ -18,8 +20,9 @@ class GameHandler {
     this.debugHandler = new DebugHandler(this);
     this.worldHandler = new WorldHandler();
     this.displayHandler = new DisplayHandler();
+    this.userHandler = new UserHandler();
     this.userID = 1;
-
+    this.userHandler.doesUserExist(this.userID);
   }
 
   init(){

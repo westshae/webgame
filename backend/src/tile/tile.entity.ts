@@ -22,4 +22,7 @@ export class TileEntity {
 
     @Column('integer')
     farmlandUtitized: number;
+
+    @Column('integer', {nullable:true})
+    ownerUserId: number;
 } 
