@@ -16,27 +16,29 @@ class WorldHandler {
   }
 
   async generateWorld(){
-    await axios.post("http://localhost:5000/tile/createWorld", {
+    axios.post("http://localhost:5000/tile/createWorld", {
       size: 32
-    });
-    await this.loadWorld();
+    }).then(() =>{
+      this.loadWorld();
+    })
   }
 
   async loadWorld() {
-    this.grid = [];
 
-    const response = await axios.get("http://localhost:5000/tile/getWorld");
-
-    for(let tileInfo of response.data){
-      let tile = new Tile(tileInfo.x, tileInfo.y, tileInfo.population, tileInfo.farmland, tileInfo.farmlandUtilized, tileInfo.biome, this.container);
-      console.log(tileInfo.population);
-
-      if (!this.grid[tileInfo.x]) {
-        this.grid[tileInfo.x] = [];
+    axios.get("http://localhost:5000/tile/getWorld").then((response) =>{
+      this.grid = [];
+      for(let tileInfo of response.data){
+        let tile = new Tile(tileInfo.x, tileInfo.y, tileInfo.population, tileInfo.farmland, tileInfo.farmlandUtilized, tileInfo.biome, this.container);
+        console.log(tileInfo.population);
+  
+        if (!this.grid[tileInfo.x]) {
+          this.grid[tileInfo.x] = [];
+        }
+        this.grid[tileInfo.x][tileInfo.y] = tile;
       }
-      this.grid[tileInfo.x][tileInfo.y] = tile;
-    }
-    this.render();
+      this.render();  
+    })
+
   }
 
   async updateWorldValues(){

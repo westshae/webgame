@@ -1,15 +1,13 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { DecisionService } from 'src/decisions/decisions.service';
 import { TileService } from 'src/tile/tile.service';
 
 @Injectable()
-export class GameloopService implements OnModuleInit {
+export class GameloopService {
   constructor(private readonly tileService: TileService, private readonly decisionService: DecisionService) {}
 
-
-  onModuleInit() {
-    // Run a function every 15 seconds
-    const intervalInMilliseconds = 5000; // 15 seconds
+  startGameloop(){
+    const intervalInMilliseconds = 15000;
     setInterval(() => {
       this.tick();
     }, intervalInMilliseconds);
