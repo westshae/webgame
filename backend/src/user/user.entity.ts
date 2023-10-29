@@ -5,6 +5,6 @@ export class UserEntity {
     @PrimaryColumn()
     id: number;
 
-    @Column()
-    hasCapital: boolean;
+    @Column('integer')
+    capitalId: number;
 } 

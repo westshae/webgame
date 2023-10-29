@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { Not, Repository } from "typeorm";
 import "dotenv/config";
 import { TileEntity } from "./tile.entity";
 import { randomInt } from "crypto";
@@ -68,5 +68,21 @@ export class TileService {
       tileInfo.population = tileInfo.population + amount;
     }
     await this.tileRepo.save(foundTiles);
+  }
+
+  async getRandomCapitalTile(userId:number){
+    let foundTiles: TileEntity[] = await this.tileRepo.find({
+      ownerUserId: null,
+      type: Not("Water")
+    });
+
+    let randomValue = randomInt(foundTiles.length-1);
+    let tileEntity = foundTiles[randomValue];
+
+    tileEntity.ownerUserId = userId;
+    this.tileRepo.save(tileEntity);
+
+    let tile = new Tile(tileEntity.id, tileEntity.x, tileEntity.y, tileEntity.population, tileEntity.type, tileEntity.farmland, tileEntity.farmlandUtitized, userId)
+    return tile;
   }
 }
