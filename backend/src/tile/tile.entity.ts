@@ -14,8 +14,8 @@ export class TileEntity {
     @Column('integer')
     population: number;
 
-    @Column('numeric')
-    biome: number;
+    @Column()
+    type: string;
 
     @Column('integer')
     farmland: number;

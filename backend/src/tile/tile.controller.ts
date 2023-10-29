@@ -1,6 +1,5 @@
 import { Controller, Get, Post, Query } from "@nestjs/common";
 import { TileService } from "./tile.service";
-
 @Controller("tile")
 export class TileController {
   constructor(private readonly tileService: TileService) {}
@@ -8,7 +7,7 @@ export class TileController {
   @Post("createWorld")
   post(@Query('size') size: number){
     try{
-      this.tileService.generateWorld(16);
+      this.tileService.generateWorld(32);
     }catch(e){
       console.error(e);
     }

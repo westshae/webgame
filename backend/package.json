@@ -13,7 +13,8 @@
     "dev": "nest start --watch",
     "debug": "nest start --debug --watch",
     "prod": "node dist/main",
-    "pg": "systemctl start docker && sudo docker-compose up",
+    "pgup": "systemctl start docker && sudo docker-compose up --force-recreate -d",
+    "pgdw": "sudo docker-compose down",
     "query": "psql postgresql://postgres:postgres@localhost:5432/postgres"
   },
   "dependencies": {

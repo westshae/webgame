@@ -3,11 +3,11 @@ export class Tile {
   x: number;
   y: number;
   population: number;
-  biome: number;
+  biome: string;
   farmland: number;
   farmlandUtilized: number;
 
-  constructor(id: number, x: number, y: number, population: number, biome: number, farmland: number, farmlandUtilized: number) {
+  constructor(id: number, x: number, y: number, population: number, biome: string, farmland: number, farmlandUtilized: number) {
       this.id = id;
       this.x = x;
       this.y = y;

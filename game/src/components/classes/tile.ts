@@ -1,5 +1,5 @@
 import { Container, Graphics, Sprite, Text } from "pixi.js";
-import { grassTexture, sandTexture, waterTexture } from "../handlers/texturesHandler";
+import { grassTexture, missingTexture, sandTexture, stoneTexture, waterTexture } from "../handlers/texturesHandler";
 
 class Tile {
   recentMouseX:number | undefined;
@@ -14,9 +14,9 @@ class Tile {
   population:number;
   farmland:number;
   farmlandUtilized:number;
-  biome:number;
+  biome:string;
 
-  constructor(x: number, y: number, population:number, farmland:number, farmlandUtilized:number, biome: number, stage: Container) {
+  constructor(x: number, y: number, population:number, farmland:number, farmlandUtilized:number, biome: string, stage: Container) {
     this.x = x;
     this.y = y;
     this.q = x - (y - (y & 1)) / 2;
@@ -37,23 +37,18 @@ class Tile {
     stage.addChild(this.sprite);
   }
 
-  handleSprite(biome: number) {
-    if (biome < -0.2) {
-      return Sprite.from(waterTexture);
-    } else if (biome < 0.1) {
-      return Sprite.from(sandTexture);
-    } else {
-      return Sprite.from(grassTexture);
-    }
-  }
-
-  getBiomeName(biome: number){
-    if (biome < -0.2) {
-      return "Ocean";
-    } else if (biome < 0.1) {
-      return "Beach";
-    } else {
-      return "Plains";
+  handleSprite(biome: string) {
+    switch (biome){
+      case "Water":
+        return Sprite.from(waterTexture);
+      case "Sand":
+        return Sprite.from(sandTexture);
+      case "Grass":
+        return Sprite.from(grassTexture);
+      case "Stone":
+        return Sprite.from(stoneTexture);
+      default:
+        return Sprite.from(missingTexture);
     }
   }
 
@@ -90,7 +85,7 @@ class Tile {
     let title: Text = new Text("Tile Information");
     let x: Text = new Text("X: " + this.x);
     let y: Text = new Text("Y: " + this.y);
-    let biome: Text = new Text("Biome: " + this.getBiomeName(this.biome));
+    let biome: Text = new Text("Biome: " + this.biome);
     let population: Text = new Text("Population: " + this.population);
     let farmland: Text = new Text("Farmland: " + this.farmland);
     let farmlandUtilization: Text = new Text("Farmland Utilization: " + this.farmlandUtilized);

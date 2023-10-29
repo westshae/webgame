@@ -5,7 +5,7 @@ import "dotenv/config";
 import { TileEntity } from "./tile.entity";
 import { randomInt } from "crypto";
 import { Tile } from "./tile";
-import { createNoise2D } from 'simplex-noise';
+import { NoiseFunction2D, createNoise2D } from 'simplex-noise';
 
 @Injectable()
 export class TileService {
@@ -16,7 +16,7 @@ export class TileService {
     const tiles = await this.tileRepo.find();
     await this.tileRepo.remove(tiles);
 
-    const biome = createNoise2D();
+    const noise = createNoise2D();
 
     let count = 0;
     for(let i = 0; i < size; i++){
@@ -26,7 +26,7 @@ export class TileService {
           x: i,
           y: j,
           population: 0,
-          biome: biome(i/16, j/16),
+          type: this.determineBiome(i,j, noise),
           farmland: randomInt(10),
           farmlandUtitized: randomInt(100)
         });
@@ -40,11 +40,24 @@ export class TileService {
     let foundTiles:TileEntity[] = await this.tileRepo.find();
 
     for(let tileInfo of foundTiles){
-      const tile = new Tile(tileInfo.id, tileInfo.x, tileInfo.y, tileInfo.population, tileInfo.biome, tileInfo.farmland, tileInfo.farmlandUtitized);
+      const tile = new Tile(tileInfo.id, tileInfo.x, tileInfo.y, tileInfo.population, tileInfo.type, tileInfo.farmland, tileInfo.farmlandUtitized);
       tiles.push(tile);
     }
 
     return tiles;
+  }
+
+  determineBiome(x:number, y:number, noise:NoiseFunction2D){
+    let biomeNumber = noise(x/16, y/16);
+    if (biomeNumber < -0.2) {
+      return "Water";
+    } else if (biomeNumber < 0.1) {
+      return "Sand";
+    } else  if (biomeNumber < 0.5) {
+      return "Grass";
+    } else {
+      return "Stone"
+    }
   }
 
   async updateTilePopulation(amount:number) {

@@ -8,7 +8,7 @@ class DisplayHandler{
     game.app.renderer.view.style.display = 'block';
   
     document.body.appendChild(game.app.view);
-    game.app.renderer.backgroundColor = 0x572529;
+    game.app.renderer.backgroundColor = 0xb9a37e;
 
     game.app.renderer.resize(window.innerWidth, window.innerHeight);
     window.addEventListener('resize', (e: UIEvent) => {
