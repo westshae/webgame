@@ -1,5 +1,5 @@
 import { Container, Graphics, Sprite, Text } from "pixi.js";
-import { grassTexture, missingTexture, sandTexture, stoneTexture, waterTexture } from "../handlers/texturesHandler";
+import { grassTexture, houseTexture, missingTexture, sandTexture, stoneTexture, waterTexture } from "../handlers/texturesHandler";
 
 class Tile {
   recentMouseX:number | undefined;
@@ -18,15 +18,17 @@ class Tile {
   spriteWidth: number;
   spriteHeight: number;
   gapPixels: number;
+  ownerId:number|null;
 
 
-  constructor(x: number, y: number, population:number, farmland:number, farmlandUtilized:number, biome: string, stage: Container) {
+  constructor(x: number, y: number, population:number, farmland:number, farmlandUtilized:number, biome: string, stage: Container, ownerId:number|null) {
     this.x = x;
     this.y = y;
     this.q = x - (y - (y & 1)) / 2;
     this.r = y;
     this.sprite = this.handleSprite(biome);
 
+    this.ownerId = ownerId;
     this.population = population;
     this.farmland = farmland;
     this.farmlandUtilized = farmlandUtilized;
@@ -65,6 +67,17 @@ class Tile {
         yindex * this.spriteHeight + this.spriteHeight / 4 - heightOffset + (yindex * this.gapPixels);
     }
 
+    if(this.ownerId != null){
+      let house = Sprite.from(houseTexture);
+
+      house.width = this.spriteWidth;
+      house.height = this.spriteWidth;
+      house.x = this.sprite.x;
+      house.y = this.sprite.y;
+  
+  
+      this.stage.addChild(house);  
+    }
   }
 
   handleSprite(biome: string) {

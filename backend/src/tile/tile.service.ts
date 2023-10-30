@@ -6,11 +6,15 @@ import { TileEntity } from "./tile.entity";
 import { randomInt } from "crypto";
 import { Tile } from "./tile";
 import { NoiseFunction2D, createNoise2D } from 'simplex-noise';
+import { UserEntity } from "src/user/user.entity";
 
 @Injectable()
 export class TileService {
   @InjectRepository(TileEntity)
   private readonly tileRepo: Repository<TileEntity>;
+
+  @InjectRepository(TileEntity)
+  private readonly userRepo: Repository<UserEntity>;
 
   async generateWorld(size:number){
     const tiles = await this.tileRepo.find();
@@ -34,6 +38,9 @@ export class TileService {
         count++;
       }
     }
+
+    let toDelete = await this.userRepo.find();
+    this.userRepo.remove(toDelete);
   }
 
   async loadWorld(){

@@ -4,14 +4,13 @@ import { UserEntity } from "./user.entity";
 import { Repository } from "typeorm";
 import "dotenv/config";
 import { TileService } from "src/tile/tile.service";
-import { response } from "express";
 
 @Injectable()
 export class UserService {
-  constructor(private readonly tileService: TileService) {}
-
   @InjectRepository(UserEntity)
   private readonly userRepo: Repository<UserEntity>;
+
+  constructor(private readonly tileService: TileService) {}
 
   async initUser(userId: number) {
     const userExists = await this.doesUserExist(userId);

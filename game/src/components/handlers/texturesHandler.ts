@@ -5,6 +5,8 @@ const sandTexture = Texture.from('../assets/tile/sand.png');
 const waterTexture = Texture.from('../assets/tile/water.png');
 const stoneTexture = Texture.from('../assets/tile/stone.png');
 const missingTexture = Texture.from('../assets/util/missing.png');
+const houseTexture = Texture.from('../assets/buildings/house.png');
+
 
 export {
   grassTexture,
@@ -12,4 +14,5 @@ export {
   waterTexture,
   stoneTexture,
   missingTexture,
+  houseTexture,
 };
