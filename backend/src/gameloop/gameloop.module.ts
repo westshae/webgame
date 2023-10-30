@@ -6,13 +6,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TileEntity } from 'src/tile/tile.entity';
 import { DecisionEntity } from 'src/decisions/decisions.entity';
 import { DecisionService } from 'src/decisions/decisions.service';
-import { GameloopController } from './gameloop.controller';
-import { UserEntity } from 'src/user/user.entity';
-import { UserService } from 'src/user/user.service';
+import { StateService } from 'src/state/state.service';
+import { StateEntity } from 'src/state/state.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([TileEntity, DecisionEntity])],
-  controllers: [GameloopController],
-  providers: [GameloopService, TileService, DecisionService],
+  imports: [TypeOrmModule.forFeature([TileEntity, DecisionEntity, StateEntity])],
+  providers: [GameloopService, TileService, DecisionService, StateService],
 })
 export class GameloopModule {}

@@ -6,15 +6,11 @@ import { TileEntity } from "./tile.entity";
 import { randomInt } from "crypto";
 import { Tile } from "./tile";
 import { NoiseFunction2D, createNoise2D } from 'simplex-noise';
-import { UserEntity } from "src/user/user.entity";
 
 @Injectable()
 export class TileService {
   @InjectRepository(TileEntity)
   private readonly tileRepo: Repository<TileEntity>;
-
-  @InjectRepository(TileEntity)
-  private readonly userRepo: Repository<UserEntity>;
 
   async generateWorld(size:number){
     const tiles = await this.tileRepo.find();
@@ -39,8 +35,6 @@ export class TileService {
       }
     }
 
-    let toDelete = await this.userRepo.find();
-    this.userRepo.remove(toDelete);
   }
 
   async loadWorld(){
@@ -83,6 +77,10 @@ export class TileService {
       type: Not("Water")
     });
 
+    if(foundTiles.length == 0){
+      return null;
+    }
+
     let randomValue = randomInt(foundTiles.length-1);
     let tileEntity = foundTiles[randomValue];
 
@@ -91,5 +89,10 @@ export class TileService {
 
     let tile = new Tile(tileEntity.id, tileEntity.x, tileEntity.y, tileEntity.population, tileEntity.type, tileEntity.farmland, tileEntity.farmlandUtitized, userId)
     return tile;
+  }
+
+  async deleteAllTiles(){
+    let tiles = await this.tileRepo.find();
+    this.tileRepo.remove(tiles);
   }
 }

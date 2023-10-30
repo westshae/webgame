@@ -14,7 +14,7 @@ export class DecisionService {
   constructor(private readonly tileService: TileService) {}
 
   async addDecisionToQueue(question:string) {
-    let id = randomBytes(2**31 -1).toString();
+    let id = randomBytes(2**29 -1).toString();
     this.decisionRepo.insert({
       id: id,
       question: question,
@@ -40,5 +40,10 @@ export class DecisionService {
     }
     return decisions;
 
+  }
+
+  async deleteAllDecisions(){
+    let decisions = await this.decisionRepo.find();
+    this.decisionRepo.remove(decisions);
   }
 }

@@ -3,11 +3,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TileEntity } from './tile.entity';
 import { TileService } from './tile.service';
 import { TileController } from './tile.controller';
-import { UserEntity } from 'src/user/user.entity';
-import { UserService } from 'src/user/user.service';
+import { StateEntity } from 'src/state/state.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([TileEntity, UserEntity])],
+  imports: [TypeOrmModule.forFeature([TileEntity, StateEntity])],
   controllers: [TileController],
   providers: [TileService]
 })

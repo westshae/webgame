@@ -1,22 +1,33 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { DecisionService } from 'src/decisions/decisions.service';
+import { StateService } from 'src/state/state.service';
 import { TileService } from 'src/tile/tile.service';
 
 @Injectable()
-export class GameloopService {
-  constructor(private readonly tileService: TileService, private readonly decisionService: DecisionService) {}
+export class GameloopService implements OnModuleInit {
+  constructor(private readonly tileService: TileService, private readonly decisionService: DecisionService, private readonly stateService: StateService) {}
+  onModuleInit() {
+    this.emptyRepos();
+    this.tileService.generateWorld(16).then(()=>{
+      this.stateService.initStates(20);
+    })
+    this.initLoop(15);
+  }
 
-  startGameloop(){
-    const intervalInMilliseconds = 15000;
+  emptyRepos(){
+    this.tileService.deleteAllTiles()
+    this.decisionService.deleteAllDecisions()
+    this.stateService.deleteAllStates();
+  }
+
+  initLoop(seconds:number){
     setInterval(() => {
       this.tick();
-    }, intervalInMilliseconds);
+    }, seconds*1000);
   }
 
   tick() {
-    // Implement your logic here
     this.tileService.updateTilePopulation(10);
     this.decisionService.addDecisionToQueue("question");
-    console.log('Service logic executed every 15 seconds');
   }
 }
