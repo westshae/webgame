@@ -12,16 +12,22 @@ export class TileEntity {
     y: number;
 
     @Column('integer')
+    q: number
+
+    @Column('integer', { array: true, nullable: true })
+    connectedTiles: number[];
+
+    @Column('integer')
     population: number;
 
     @Column()
-    type: string;
+    biome: string;
 
     @Column('integer')
     farmland: number;
 
     @Column('integer')
-    farmlandUtitized: number;
+    farmlandUtilized: number;
 
     @Column('integer', {nullable:true})
     ownerUserId: number;

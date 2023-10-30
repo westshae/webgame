@@ -7,7 +7,6 @@ class Tile {
   x: number;
   y: number;
   q: number;
-  r: number;
   sprite: Sprite;
   stage: Container;
   infobox: Container | null;
@@ -21,11 +20,10 @@ class Tile {
   ownerId:number|null;
 
 
-  constructor(x: number, y: number, population:number, farmland:number, farmlandUtilized:number, biome: string, stage: Container, ownerId:number|null) {
+  constructor(x: number, y: number, q: number, population:number, farmland:number, farmlandUtilized:number, biome: string, stage: Container, ownerId:number|null) {
     this.x = x;
     this.y = y;
-    this.q = x - (y - (y & 1)) / 2;
-    this.r = y;
+    this.q = q;
     this.sprite = this.handleSprite(biome);
 
     this.ownerId = ownerId;

@@ -3,7 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import "dotenv/config";
 import { DecisionEntity } from "./decisions.entity";
-import { randomBytes } from "crypto";
+import { randomInt } from "crypto";
 import { Decision } from "./decisions";
 import { TileService } from "src/tile/tile.service";
 
@@ -14,7 +14,7 @@ export class DecisionService {
   constructor(private readonly tileService: TileService) {}
 
   async addDecisionToQueue(question:string) {
-    let id = randomBytes(2**29 -1).toString();
+    let id = randomInt(9999999);
     this.decisionRepo.insert({
       id: id,
       question: question,
