@@ -4,7 +4,7 @@ import { TileService } from "./tile.service";
 export class TileController {
   constructor(private readonly tileService: TileService) {}
   @Get("getWorld")
-  async get(@Query() query){
+  async get(){
     try{
       return await this.tileService.loadWorld();
     }catch(e){

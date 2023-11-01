@@ -17,18 +17,15 @@ export class TileEntity {
     @Column('integer', { array: true, nullable: true })
     connectedTiles: number[];
 
-    @Column('integer')
-    population: number;
-
     @Column()
     biome: string;
 
     @Column('integer')
-    farmland: number;
-
+    farmlandMax: number;
+    
     @Column('integer')
-    farmlandUtilized: number;
+    housingMax: number;
 
     @Column('integer', {nullable:true})
-    ownerUserId: number;
+    stateId: number;
 } 

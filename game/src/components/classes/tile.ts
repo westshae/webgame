@@ -4,33 +4,40 @@ import { grassTexture, houseTexture, missingTexture, sandTexture, stoneTexture, 
 class Tile {
   recentMouseX:number | undefined;
   recentMouseY:number | undefined;
-  x: number;
-  y: number;
-  q: number;
-  sprite: Sprite;
-  stage: Container;
-  infobox: Container | null;
-  population:number;
-  farmland:number;
-  farmlandUtilized:number;
-  biome:string;
   spriteWidth: number;
   spriteHeight: number;
   gapPixels: number;
-  ownerId:number|null;
 
 
-  constructor(x: number, y: number, q: number, population:number, farmland:number, farmlandUtilized:number, biome: string, stage: Container, ownerId:number|null) {
+  sprite: Sprite;
+  stage: Container;
+  infobox: Container | null;
+
+  x: number;
+  y: number;
+  q: number;
+  stateId:number|null;
+  biome:string;
+
+  connectedTiles: number[];
+  housingMax: number;
+  farmlandMax: number;
+
+
+
+  constructor(x: number, y: number, q: number, biome:string, housingMax:number, farmlandMax:number, stage: Container, stateId: number|null, connectedTiles: number[]) {
     this.x = x;
     this.y = y;
     this.q = q;
-    this.sprite = this.handleSprite(biome);
 
-    this.ownerId = ownerId;
-    this.population = population;
-    this.farmland = farmland;
-    this.farmlandUtilized = farmlandUtilized;
+    this.housingMax = housingMax;
+    this.farmlandMax = farmlandMax;
     this.biome = biome;
+
+    this.stateId = stateId;
+    this.connectedTiles = connectedTiles;
+
+    this.sprite = this.handleSprite(biome);
 
     this.spriteWidth = Math.sqrt(3) * 50;
     this.spriteHeight = 2 * 50;
@@ -65,7 +72,7 @@ class Tile {
         yindex * this.spriteHeight + this.spriteHeight / 4 - heightOffset + (yindex * this.gapPixels);
     }
 
-    if(this.ownerId != null){
+    if(this.stateId != null){
       let house = Sprite.from(houseTexture);
 
       house.width = this.spriteWidth;
@@ -122,31 +129,25 @@ class Tile {
     closeButton.interactive = true;
 
     closeButton.on("pointerdown", () => this.handleClose());
-
+  
     let title: Text = new Text("Tile Information");
-    let x: Text = new Text("X: " + this.x);
-    let y: Text = new Text("Y: " + this.y);
+    let coords: Text = new Text("X-Y-Q: " + this.x + "-" + this.y + "-" + this.q);
     let biome: Text = new Text("Biome: " + this.biome);
-    let population: Text = new Text("Population: " + this.population);
-    let farmland: Text = new Text("Farmland: " + this.farmland);
-    let farmlandUtilization: Text = new Text("Farmland Utilization: " + this.farmlandUtilized);
+    let housing: Text = new Text("Max Housing: " + this.housingMax);
+    let farmland: Text = new Text("Max Farmland: " + this.farmlandMax);
 
     title.position.set(0, -20);
-    x.position.set(0, 0);
-    y.position.set(0, 20);
-    biome.position.set(0, 40);
-    population.position.set(0, 60);
-    farmland.position.set(0, 80);
-    farmlandUtilization.position.set(0, 100);
+    coords.position.set(0, 0);
+    biome.position.set(0, 20);
+    housing.position.set(0, 40);
+    farmland.position.set(0, 60);
 
     this.infobox.addChild(background);
     this.infobox.addChild(title);
-    this.infobox.addChild(x);
-    this.infobox.addChild(y);
+    this.infobox.addChild(coords);
     this.infobox.addChild(biome);
-    this.infobox.addChild(population);
+    this.infobox.addChild(housing);
     this.infobox.addChild(farmland);
-    this.infobox.addChild(farmlandUtilization);
 
     this.infobox.addChild(closeButton);
     this.stage.addChild(this.infobox);

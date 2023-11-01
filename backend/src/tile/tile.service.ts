@@ -29,12 +29,11 @@ export class TileService {
           j,
           i - (j - (j & 1)) / 2,
           [],
-          0,
-          this.determineBiome(i, j, noise),
-          randomInt(10),
-          randomInt(100),
-          null,
-        );
+          this.determineBiome(i,j, noise),
+          randomInt(99),
+          randomInt(99),
+          null
+        )
         count++;
         madeTiles.push(tile);
       }
@@ -71,11 +70,10 @@ export class TileService {
         y: tile.y,
         q: tile.x - (tile.y - (tile.y & 1)) / 2,
         connectedTiles: tile.connectedTiles,
-        population: tile.population,
+        housingMax: tile.housingMax,
         biome: tile.biome,
-        farmland: tile.farmland,
-        farmlandUtilized: tile.farmlandUtilized,
-        ownerUserId: tile.ownerUserId,
+        farmlandMax: tile.farmlandMax,
+        stateId: tile.stateId,
       });
     }
   }
@@ -91,12 +89,11 @@ export class TileService {
         tileInfo.y,
         tileInfo.q,
         tileInfo.connectedTiles,
-        tileInfo.population,
         tileInfo.biome,
-        tileInfo.farmland,
-        tileInfo.farmlandUtilized,
-        tileInfo.ownerUserId,
-      );
+        tileInfo.housingMax,
+        tileInfo.farmlandMax,
+        tileInfo.stateId
+      )
       tiles.push(tile);
     }
 
@@ -116,18 +113,9 @@ export class TileService {
     }
   }
 
-  async updateTilePopulation(amount: number) {
-    let foundTiles: TileEntity[] = await this.tileRepo.find();
-
-    for (let tileInfo of foundTiles) {
-      tileInfo.population = tileInfo.population + amount;
-    }
-    await this.tileRepo.save(foundTiles);
-  }
-
-  async getRandomCapitalTile(userId: number) {
+  async getRandomCapitalTile(stateId: number) {
     let foundTiles: TileEntity[] = await this.tileRepo.find({
-      ownerUserId: null,
+      stateId: null,
       biome: Not("Water"),
     });
 
@@ -138,21 +126,20 @@ export class TileService {
     let randomValue = randomInt(foundTiles.length - 1);
     let tileEntity = foundTiles[randomValue];
 
-    tileEntity.ownerUserId = userId;
+    tileEntity.stateId = stateId;
     this.tileRepo.save(tileEntity);
 
     let tile = new Tile(
-      tileEntity.id,
+      tileEntity.id, 
       tileEntity.x,
       tileEntity.y,
-      tileEntity.q,
+      tileEntity.q, 
       tileEntity.connectedTiles,
-      tileEntity.population,
       tileEntity.biome,
-      tileEntity.farmland,
-      tileEntity.farmlandUtilized,
-      userId,
-    );
+      tileEntity.housingMax,
+      tileEntity.farmlandMax,
+      tileEntity.stateId
+    )
     return tile;
   }
 

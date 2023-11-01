@@ -3,23 +3,21 @@ export class Tile {
   x: number;
   y: number;
   q: number;
-  connectedTiles: number[];
-  population: number;
   biome: string;
-  farmland: number;
-  farmlandUtilized: number;
-  ownerUserId: number | null;
+  connectedTiles: number[];
+  housingMax: number;
+  farmlandMax: number;
+  stateId: number | null;
 
-  constructor(id: number, x: number, y: number, q: number, connectedTiles:number[], population: number, biome: string, farmland: number, farmlandUtilized: number, ownerUserId: number | null) {
+  constructor(id: number, x: number, y: number, q: number, connectedTiles:number[], biome: string, housingMax: number, farmlandMax: number, stateId: number | null) {
       this.id = id;
       this.x = x;
       this.y = y;
       this.q = q;
       this.connectedTiles = connectedTiles;
-      this.population = population;
+      this.housingMax = housingMax;
       this.biome = biome;
-      this.farmland = farmland;
-      this.farmlandUtilized = farmlandUtilized;
-      this.ownerUserId = ownerUserId;
+      this.farmlandMax = farmlandMax;
+      this.stateId = stateId;
   }
 }

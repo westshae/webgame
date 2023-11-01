@@ -28,7 +28,7 @@ export class DecisionService {
   }
 
   finishDecision(optionNumber:number, questionId:number){
-    this.tileService.updateTilePopulation(optionNumber);
+    // this.tileService.updateTilePopulation(optionNumber);
   }
 
   async getAllDecisions(){

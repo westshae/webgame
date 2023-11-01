@@ -9,7 +9,7 @@ export class GameloopService implements OnModuleInit {
   onModuleInit() {
     this.emptyRepos();
     this.tileService.generateWorld(16).then(()=>{
-      this.stateService.initStates(20);
+      this.stateService.initStates(4);
     })
     this.initLoop(15);
   }
@@ -27,7 +27,6 @@ export class GameloopService implements OnModuleInit {
   }
 
   tick() {
-    this.tileService.updateTilePopulation(10);
     this.decisionService.addDecisionToQueue("question");
   }
 }

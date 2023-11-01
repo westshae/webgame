@@ -24,8 +24,7 @@ class WorldHandler {
     axios.get("http://localhost:5000/tile/getWorld").then((response) =>{
       this.grid = [];
       for(let tileInfo of response.data){
-        let tile = new Tile(tileInfo.x, tileInfo.y, tileInfo.q, tileInfo.population, tileInfo.farmland, tileInfo.farmlandUtilized, tileInfo.biome, this.container, tileInfo.ownerUserId);
-        console.log(tileInfo.ownerUserId);
+        let tile = new Tile(tileInfo.x, tileInfo.y, tileInfo.q, tileInfo.biome, tileInfo.housingMax, tileInfo.farmlandMax, this.container, tileInfo.stateId, tileInfo.connectedTiles);
   
         if (!this.grid[tileInfo.x]) {
           this.grid[tileInfo.x] = [];
@@ -46,9 +45,8 @@ class WorldHandler {
     for(let tileInfo of response.data){
       let tile = this.grid[tileInfo.x][tileInfo.y];
 
-      tile.population = tileInfo.population;
-      tile.farmland = tileInfo.farmland;
-      tile.farmlandUtilized = tileInfo.farmlandUtilized;
+      tile.housingMax = tileInfo.housingMax;
+      tile.farmlandMax = tileInfo.farmlandMax;
       tile.biome = tileInfo.biome;
 
       if (!this.grid[tileInfo.x]) {
