@@ -1,12 +1,15 @@
 import { Tile } from "../classes/tile";
 import { Container } from "pixi.js";
 import axios from "axios";
+import { GameHandler } from "./gameHandler";
 
 class WorldHandler {
   container: Container;
+  game:GameHandler;
   tiles: { [id: number]: Tile };
 
-  constructor() {
+  constructor(game:GameHandler) {
+    this.game = game;
     this.container = new Container();
     this.tiles = [];
   }
@@ -15,7 +18,7 @@ class WorldHandler {
     axios.get("http://localhost:5000/tile/getWorld").then((response) =>{
       this.tiles = [];
       for(let entity of response.data){
-        let tile = new Tile(entity.x, entity.y, entity.q, entity.biome, entity.housingMax, entity.farmlandMax, this.container, entity.stateId, entity.connectedTiles, entity.colourId);
+        let tile = new Tile(entity.x, entity.y, entity.q, entity.biome, entity.housingMax, entity.farmlandMax, this.container, entity.stateId, entity.connectedTiles, entity.colourId, false);
         this.tiles[entity.id] = tile;
       }
       this.render();  

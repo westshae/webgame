@@ -17,7 +17,7 @@ class GameHandler {
     this.app = new Application();
     this.decisionHandler = new DecisionHandler(this.app.stage);
     this.debugHandler = new DebugHandler(this);
-    this.worldHandler = new WorldHandler();
+    this.worldHandler = new WorldHandler(this);
     this.displayHandler = new DisplayHandler();
     this.stateHandler = new StateHandler(this);
   }

@@ -35,6 +35,9 @@ class StateHandler {
         if(tile == null){
           continue;
         }
+        if(state.capitalId == tileId){
+          tile.isCapital = true;
+        }
         tile.stateId = state.id;
         tile.colourId = state.colourId;
         this.game.worldHandler.setTile(tileId, tile);

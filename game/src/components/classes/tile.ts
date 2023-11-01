@@ -23,10 +23,11 @@ class Tile {
   housingMax: number;
   farmlandMax: number;
   colourId:number;
+  isCapital:boolean;
 
 
 
-  constructor(x: number, y: number, q: number, biome:string, housingMax:number, farmlandMax:number, stage: Container, stateId: number|null, connectedTiles: number[], colourId: number) {
+  constructor(x: number, y: number, q: number, biome:string, housingMax:number, farmlandMax:number, stage: Container, stateId: number|null, connectedTiles: number[], colourId: number, isCapital:boolean) {
     this.x = x;
     this.y = y;
     this.q = q;
@@ -35,6 +36,7 @@ class Tile {
     this.farmlandMax = farmlandMax;
     this.biome = biome;
     this.colourId = colourId;
+    this.isCapital = isCapital;
 
     this.stateId = stateId;
     this.connectedTiles = connectedTiles;
@@ -105,10 +107,9 @@ class Tile {
   
   
       this.stage.addChild(sprite);
-
     }
 
-    if(this.stateId != null){
+    if(this.isCapital){
       let house = Sprite.from(houseTexture);
 
       house.width = this.spriteWidth;
