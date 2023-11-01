@@ -11,14 +11,6 @@ class WorldHandler {
     this.container = new Container();
   }
 
-  async generateWorld(){
-    axios.post("http://localhost:5000/tile/createWorld", {
-      size: 32
-    }).then(() =>{
-      this.loadWorld();
-    })
-  }
-
   async loadWorld() {
 
     axios.get("http://localhost:5000/tile/getWorld").then((response) =>{

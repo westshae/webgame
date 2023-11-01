@@ -25,13 +25,6 @@ class DebugHandler {
 
     this.container.x = screenWidth-200;
 
-
-    let generateNewWorldButton = new Graphics();
-    generateNewWorldButton.beginFill(0x990000);
-    generateNewWorldButton.drawCircle(-20, 50, 20);
-    generateNewWorldButton.interactive = true;
-    generateNewWorldButton.on("pointerdown", () => this.handleGenerateNewWorld());
-
     let startTickLoopButton = new Graphics();
     startTickLoopButton.beginFill(0x009900);
     startTickLoopButton.drawCircle(-20, 100, 20);
@@ -51,26 +44,22 @@ class DebugHandler {
     setPlayer2Button.on("pointerdown", () => this.handleSetPlayer2());
 
     let title: Text = new Text("Debug Settings");
-    let generateWorldText: Text = new Text("Generate World");
     let startTickLoopText: Text = new Text("Start Ticks");
     let setPlayer1Text: Text = new Text("Set Player 1");
     let setPlayer2Text: Text = new Text("Set Player 2");
 
     title.position.set(0, 0);
-    generateWorldText.position.set(0, 35);
-    startTickLoopText.position.set(0, 85);
-    setPlayer1Text.position.set(0, 135);
-    setPlayer2Text.position.set(0, 185);
+    startTickLoopText.position.set(0, 35);
+    setPlayer1Text.position.set(0, 85);
+    setPlayer2Text.position.set(0, 135);
 
 
     this.container.addChild(title);
-    this.container.addChild(generateWorldText);
     this.container.addChild(startTickLoopText);
     this.container.addChild(setPlayer1Text);
     this.container.addChild(setPlayer2Text);
 
 
-    this.container.addChild(generateNewWorldButton);
     this.container.addChild(startTickLoopButton);
     this.container.addChild(setPlayer1Button);
     this.container.addChild(setPlayer2Button);
@@ -78,16 +67,8 @@ class DebugHandler {
     this.stage.addChild(this.container)
   }
 
-  handleGenerateNewWorld(){
-    this.game.worldHandler.generateWorld().then(()=>{
-      this.game.worldHandler.render();
-    });
-  }
-
   async handleTickLoop(){
-    await axios.post("http://localhost:5000/gameloop/startGameloop").then(() =>{
-      this.game.beginLoop();
-    })
+    this.game.beginLoop();
   }
 
   handleSetPlayer1(){
