@@ -3,6 +3,7 @@ import { WorldHandler } from './worldHandler';
 import { DecisionHandler } from './decisionHandler';
 import { DisplayHandler } from './displayHandler';
 import { DebugHandler } from './debugHandler';
+import { StateHandler } from './stateHandler';
 
 class GameHandler {
   app: Application;
@@ -10,6 +11,7 @@ class GameHandler {
   decisionHandler: DecisionHandler;
   displayHandler: DisplayHandler;
   debugHandler: DebugHandler;
+  stateHandler: StateHandler
 
   constructor() {
     this.app = new Application();
@@ -17,10 +19,12 @@ class GameHandler {
     this.debugHandler = new DebugHandler(this);
     this.worldHandler = new WorldHandler();
     this.displayHandler = new DisplayHandler();
+    this.stateHandler = new StateHandler(this);
   }
 
   init(){
     this.worldHandler.loadWorld();
+    this.stateHandler.loadStates();
     this.tick();
   }
 

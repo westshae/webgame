@@ -28,6 +28,9 @@ class WorldHandler {
 
     for(let entity of response.data){
       let tile = this.tiles[entity.id];
+      if(tile == null){
+        continue;
+      }
 
       tile.housingMax = entity.housingMax;
       tile.farmlandMax = entity.farmlandMax;

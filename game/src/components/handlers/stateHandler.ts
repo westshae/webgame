@@ -16,13 +16,14 @@ class StateHandler {
   }
 
   async loadStates() {
-    axios.get("http://localhost:5000/tile/getWorld").then((response) =>{
+    axios.get("http://localhost:5000/state/getStates").then((response) =>{
       this.states = [];
 
       for(let entity of response.data){
         let state = new State(entity.id, entity.capitalId, entity.controllerId, entity.tileIds, entity.colourId)
         this.states[entity.id] = state;
       }
+      this.updateStateTiles();
     })
   }
 
@@ -31,6 +32,9 @@ class StateHandler {
       let tileIds = state.tileIds;
       for(let tileId of tileIds){
         let tile = this.game.worldHandler.getTileFromId(tileId);
+        if(tile == null){
+          continue;
+        }
         tile.stateId = state.id;
         tile.colourId = state.colourId;
         this.game.worldHandler.setTile(tileId, tile);
