@@ -4,24 +4,19 @@ import axios from "axios";
 
 class WorldHandler {
   container: Container;
-  grid: Array<Array<Tile>> | undefined;
+  tiles: { [id: number]: Tile };
 
   constructor() {
-
     this.container = new Container();
+    this.tiles = [];
   }
 
   async loadWorld() {
-
     axios.get("http://localhost:5000/tile/getWorld").then((response) =>{
-      this.grid = [];
-      for(let tileInfo of response.data){
-        let tile = new Tile(tileInfo.x, tileInfo.y, tileInfo.q, tileInfo.biome, tileInfo.housingMax, tileInfo.farmlandMax, this.container, tileInfo.stateId, tileInfo.connectedTiles);
-  
-        if (!this.grid[tileInfo.x]) {
-          this.grid[tileInfo.x] = [];
-        }
-        this.grid[tileInfo.x][tileInfo.y] = tile;
+      this.tiles = [];
+      for(let entity of response.data){
+        let tile = new Tile(entity.x, entity.y, entity.q, entity.biome, entity.housingMax, entity.farmlandMax, this.container, entity.stateId, entity.connectedTiles, entity.colourId);
+        this.tiles[entity.id] = tile;
       }
       this.render();  
     })
@@ -29,34 +24,29 @@ class WorldHandler {
   }
 
   async updateWorldValues(){
-    if(this.grid == undefined){
-      return;
-    }
     const response = await axios.get("http://localhost:5000/tile/getWorld");
 
-    for(let tileInfo of response.data){
-      let tile = this.grid[tileInfo.x][tileInfo.y];
+    for(let entity of response.data){
+      let tile = this.tiles[entity.id];
 
-      tile.housingMax = tileInfo.housingMax;
-      tile.farmlandMax = tileInfo.farmlandMax;
-      tile.biome = tileInfo.biome;
-
-      if (!this.grid[tileInfo.x]) {
-        this.grid[tileInfo.x] = [];
-      }
-      this.grid[tileInfo.x][tileInfo.y] = tile;
+      tile.housingMax = entity.housingMax;
+      tile.farmlandMax = entity.farmlandMax;
+      tile.biome = entity.biome;
+      this.tiles[entity.id] = tile;
     }
+  }
 
+  setTile(id:number, tile:Tile){
+    this.tiles[id] = tile;
+  }
+
+  getTileFromId(id:number){
+    return this.tiles[id];
   }
 
   render() {
-    if(this.grid == undefined){
-      return;
-    }
-    for (let value of this.grid) {
-      for (let tile of value) {
-        tile.render();
-      }
+    for(let tile of Object.values(this.tiles)){
+      tile.render();
     }
   }
 }

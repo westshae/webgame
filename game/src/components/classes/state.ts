@@ -1,8 +1,17 @@
 class State {
-  val: number;
+  id: number;
+  capitalId: number;
+  controllerId:number | null;
+  tileIds: number[];
+  colourId: number;
 
-  constructor(val: number) {
-    this.val = val;
+
+  constructor(id: number, capitalId: number, controllerId: number | null, tileIds:number[], colourId:number) {
+    this.id = id;
+    this.capitalId = capitalId;
+    this.controllerId = controllerId;
+    this.tileIds = tileIds;
+    this.colourId = colourId;
   }
 
 }

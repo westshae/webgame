@@ -10,4 +10,10 @@ export class StateEntity {
 
     @Column('integer', {nullable: true})
     controllerId:number;
+
+    @Column('integer', {array: true})
+    tileIds: number[];
+
+    @Column('integer')
+    colourId: number;
 } 

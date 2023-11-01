@@ -18,8 +18,16 @@ export class StateService {
       this.stateRepo.insert({
         id: i,
         capitalId: tile.id,
+        tileIds: [tile.id],
+        colourId: i % 6 + 1
       });
+      this.tileService.setStateId(tile.id, i);
     }
+  }
+
+  async getAllStates(){
+    let states = await this.stateRepo.find();
+    return states;
   }
 
   async deleteAllStates(){

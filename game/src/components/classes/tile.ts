@@ -1,5 +1,5 @@
 import { Container, Graphics, Sprite, Text } from "pixi.js";
-import { grassTexture, houseTexture, missingTexture, sandTexture, stoneTexture, waterTexture } from "../handlers/texturesHandler";
+import { blueSelector, grassTexture, greenSelector, houseTexture, missingTexture, orangeSelector, purpleSelector, redSelector, sandTexture, stoneTexture, waterTexture, yellowSelector } from "../handlers/texturesHandler";
 
 class Tile {
   recentMouseX:number | undefined;
@@ -22,10 +22,11 @@ class Tile {
   connectedTiles: number[];
   housingMax: number;
   farmlandMax: number;
+  colourId:number;
 
 
 
-  constructor(x: number, y: number, q: number, biome:string, housingMax:number, farmlandMax:number, stage: Container, stateId: number|null, connectedTiles: number[]) {
+  constructor(x: number, y: number, q: number, biome:string, housingMax:number, farmlandMax:number, stage: Container, stateId: number|null, connectedTiles: number[], colourId: number) {
     this.x = x;
     this.y = y;
     this.q = q;
@@ -33,6 +34,7 @@ class Tile {
     this.housingMax = housingMax;
     this.farmlandMax = farmlandMax;
     this.biome = biome;
+    this.colourId = colourId;
 
     this.stateId = stateId;
     this.connectedTiles = connectedTiles;
@@ -73,10 +75,44 @@ class Tile {
     }
 
     if(this.stateId != null){
+      let sprite;
+      switch(this.colourId){
+        case 1:
+          sprite = Sprite.from(blueSelector);
+          break;
+        case 2:
+          sprite = Sprite.from(greenSelector);
+          break;
+        case 3:
+          sprite = Sprite.from(orangeSelector);
+          break;
+        case 4:
+          sprite = Sprite.from(purpleSelector);
+          break;
+        case 5:
+          sprite = Sprite.from(redSelector);
+          break;
+        case 6:
+          sprite = Sprite.from(yellowSelector);
+          break;
+        default:
+          sprite = Sprite.from(blueSelector);
+      }
+      sprite.width = this.spriteWidth;
+      sprite.height = this.spriteHeight;
+      sprite.x = this.sprite.x;
+      sprite.y = this.sprite.y;
+  
+  
+      this.stage.addChild(sprite);
+
+    }
+
+    if(this.stateId != null){
       let house = Sprite.from(houseTexture);
 
       house.width = this.spriteWidth;
-      house.height = this.spriteWidth;
+      house.height = this.spriteHeight;
       house.x = this.sprite.x;
       house.y = this.sprite.y;
   

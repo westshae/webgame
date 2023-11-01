@@ -8,8 +8,8 @@ export class GameloopService implements OnModuleInit {
   constructor(private readonly tileService: TileService, private readonly decisionService: DecisionService, private readonly stateService: StateService) {}
   onModuleInit() {
     this.emptyRepos();
-    this.tileService.generateWorld(16).then(()=>{
-      this.stateService.initStates(4);
+    this.tileService.generateWorld(32).then(()=>{
+      this.stateService.initStates(16);
     })
     this.initLoop(15);
   }
