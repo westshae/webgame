@@ -3,7 +3,6 @@ import { WorldHandler } from './worldHandler';
 import { DecisionHandler } from './decisionHandler';
 import { DisplayHandler } from './displayHandler';
 import { DebugHandler } from './debugHandler';
-import { UserHandler } from './userHandler';
 
 class GameHandler {
   app: Application;
@@ -11,7 +10,6 @@ class GameHandler {
   decisionHandler: DecisionHandler;
   displayHandler: DisplayHandler;
   debugHandler: DebugHandler;
-  userHandler: UserHandler;
 
   constructor() {
     this.app = new Application();
@@ -19,7 +17,6 @@ class GameHandler {
     this.debugHandler = new DebugHandler(this);
     this.worldHandler = new WorldHandler();
     this.displayHandler = new DisplayHandler();
-    this.userHandler = new UserHandler();
   }
 
   init(){
