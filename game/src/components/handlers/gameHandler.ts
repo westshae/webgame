@@ -26,6 +26,7 @@ class GameHandler {
     this.worldHandler.loadWorld();
     this.stateHandler.loadStates();
     this.tick();
+    this.beginLoop();
   }
 
   beginLoop(){
@@ -39,6 +40,7 @@ class GameHandler {
     this.decisionHandler.loadDecisions();
     this.decisionHandler.refreshDecisionHolder();
     this.debugHandler.refreshDebugHolder();
+    this.stateHandler.loadStates();
   }
 
   render(){

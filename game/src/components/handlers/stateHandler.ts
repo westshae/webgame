@@ -23,11 +23,11 @@ class StateHandler {
         let state = new State(entity.id, entity.capitalId, entity.controllerId, entity.tileIds, entity.colourId)
         this.states[entity.id] = state;
       }
-      this.updateStateTiles();
+      this.renderStates();
     })
   }
 
-  async updateStateTiles(){
+  renderStates(){
     for(let state of Object.values(this.states)){
       let tileIds = state.tileIds;
       for(let tileId of tileIds){

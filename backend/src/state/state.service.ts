@@ -13,7 +13,7 @@ export class StateService {
   constructor(private readonly tileService: TileService) {}
 
   async initStates(amount:number){
-    for(let i = 0; i < amount; i++){
+    for(let i = 1; i < amount; i++){
       const tile = await this.tileService.getRandomCapitalTile(i);
       this.stateRepo.insert({
         id: i,
