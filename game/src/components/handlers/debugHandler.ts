@@ -27,7 +27,7 @@ class DebugHandler {
 
     let startTickLoopButton = new Graphics();
     startTickLoopButton.beginFill(0x009900);
-    startTickLoopButton.drawCircle(-20, 100, 20);
+    startTickLoopButton.drawCircle(-20, 50, 20);
     startTickLoopButton.interactive = true;
     startTickLoopButton.on("pointerdown", () => this.handleTickLoop());
 
