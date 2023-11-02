@@ -143,6 +143,10 @@ export class TileService {
     return tile;
   }
 
+  async getTileFromId(id: number){
+    return await this.tileRepo.findOne({id:id});
+  }
+
   async setStateId(tileId:number, stateId:number){
     let tile = await this.tileRepo.findOne({id:tileId});
     tile.stateId = stateId;

@@ -1,5 +1,6 @@
 import { Container, Graphics, Sprite, Text } from "pixi.js";
 import { blueSelector, grassTexture, greenSelector, houseTexture, missingTexture, orangeSelector, purpleSelector, redSelector, sandTexture, stoneTexture, waterTexture, yellowSelector } from "../handlers/texturesHandler";
+import { GameHandler } from "../handlers/gameHandler";
 
 class Tile {
   recentMouseX:number | undefined;
@@ -10,6 +11,7 @@ class Tile {
 
 
   sprite: Sprite;
+  game: GameHandler;
   stage: Container;
   infobox: Container | null;
 
@@ -27,7 +29,7 @@ class Tile {
 
 
 
-  constructor(x: number, y: number, q: number, biome:string, housingMax:number, farmlandMax:number, stage: Container, stateId: number|null, connectedTiles: number[], colourId: number, isCapital:boolean) {
+  constructor(x: number, y: number, q: number, biome:string, housingMax:number, farmlandMax:number, stage: Container, stateId: number|null, connectedTiles: number[], colourId: number, isCapital:boolean, game: GameHandler) {
     this.x = x;
     this.y = y;
     this.q = q;
@@ -53,6 +55,7 @@ class Tile {
     this.sprite.on("pointerup", (event: any) => this.handleTileInfo(event));
     this.infobox = null;
 
+    this.game = game;
     this.stage = stage;
     stage.addChild(this.sprite);
   }
@@ -104,13 +107,19 @@ class Tile {
       sprite.height = this.spriteHeight;
       sprite.x = this.sprite.x;
       sprite.y = this.sprite.y;
-  
+
+      sprite.on("pointerdown", (event: any) => this.handlePointerDown(event));
+      sprite.on("pointerup", (event: any) => this.handleTileInfo(event));
   
       this.stage.addChild(sprite);
     }
 
     if(this.isCapital){
       let house = Sprite.from(houseTexture);
+
+      house.on("pointerdown", (event: any) => this.handlePointerDown(event));
+      house.on("pointerup", (event: any) => this.handleTileInfo(event));
+  
 
       house.width = this.spriteWidth;
       house.height = this.spriteHeight;
@@ -120,6 +129,9 @@ class Tile {
   
       this.stage.addChild(house);  
     }
+
+    this.stage.sortChildren();
+
   }
 
   handleSprite(biome: string) {
@@ -150,6 +162,7 @@ class Tile {
       return;
     }
     this.infobox = new Container();
+    this.infobox.zIndex = 10;
     this.infobox.setTransform(this.sprite.x + 50, this.sprite.y-50)
     let closeButton = new Graphics();
 
@@ -173,6 +186,7 @@ class Tile {
     let housing: Text = new Text("Max Housing: " + this.housingMax);
     let farmland: Text = new Text("Max Farmland: " + this.farmlandMax);
 
+
     title.position.set(0, -20);
     coords.position.set(0, 0);
     biome.position.set(0, 20);
@@ -185,6 +199,13 @@ class Tile {
     this.infobox.addChild(biome);
     this.infobox.addChild(housing);
     this.infobox.addChild(farmland);
+
+    if(this.stateId != null){
+      let decisionCount: Text = new Text("Decision Count: " + this.game.stateHandler.states[this.stateId].decisions.length);
+      decisionCount.position.set(0, 80);
+      this.infobox.addChild(decisionCount);
+    }
+
 
     this.infobox.addChild(closeButton);
     this.stage.addChild(this.infobox);

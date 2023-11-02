@@ -20,7 +20,7 @@ class StateHandler {
       this.states = [];
 
       for(let entity of response.data){
-        let state = new State(entity.id, entity.capitalId, entity.controllerId, entity.tileIds, entity.colourId)
+        let state = new State(entity.id, entity.capitalId, entity.controllerId, entity.tileIds, entity.colourId, entity.decisions);
         this.states[entity.id] = state;
       }
       this.renderStates();

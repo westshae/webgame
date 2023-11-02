@@ -16,4 +16,7 @@ export class StateEntity {
 
     @Column('integer')
     colourId: number;
+
+    @Column('jsonb')
+    decisions: string[];
 } 

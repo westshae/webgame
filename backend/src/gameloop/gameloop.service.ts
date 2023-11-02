@@ -1,22 +1,20 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { DecisionService } from 'src/decisions/decisions.service';
 import { StateService } from 'src/state/state.service';
 import { TileService } from 'src/tile/tile.service';
 
 @Injectable()
 export class GameloopService implements OnModuleInit {
-  constructor(private readonly tileService: TileService, private readonly decisionService: DecisionService, private readonly stateService: StateService) {}
+  constructor(private readonly tileService: TileService, private readonly stateService: StateService) {}
   onModuleInit() {
     this.emptyRepos();
-    this.tileService.generateWorld(32).then(()=>{
-      this.stateService.initStates(16);
+    this.tileService.generateWorld(16).then(()=>{
+      this.stateService.initStates(8);
     })
-    this.initLoop(15);
+    this.initLoop(5);
   }
 
   emptyRepos(){
     this.tileService.deleteAllTiles()
-    this.decisionService.deleteAllDecisions()
     this.stateService.deleteAllStates();
   }
 
@@ -27,6 +25,7 @@ export class GameloopService implements OnModuleInit {
   }
 
   tick() {
-    this.decisionService.addDecisionToQueue("question");
+    this.stateService.giveAllStatesNewTile();
+    this.stateService.addDecisionToAllStates();
   }
 }
