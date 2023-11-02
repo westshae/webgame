@@ -200,7 +200,7 @@ class Tile {
     this.infobox.addChild(housing);
     this.infobox.addChild(farmland);
 
-    if(this.stateId != null){
+    if(this.stateId != null && this.isCapital){
       let decisionCount: Text = new Text("Decision Count: " + this.game.stateHandler.states[this.stateId].decisions.length);
       decisionCount.position.set(0, 80);
       this.infobox.addChild(decisionCount);
