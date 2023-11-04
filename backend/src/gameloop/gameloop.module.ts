@@ -1,4 +1,3 @@
-// gameloop.module.ts
 import { Module } from '@nestjs/common';
 import { GameloopService } from './gameloop.service';
 import { TileService } from 'src/tile/tile.service';

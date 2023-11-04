@@ -15,7 +15,7 @@ export class StateEntity {
     tileIds: number[];
 
     @Column('integer')
-    colourId: number;
+    hexcode: number;
 
     @Column('jsonb')
     decisions: string[];

@@ -18,7 +18,7 @@ class WorldHandler {
     axios.get("http://localhost:5000/tile/getWorld").then((response) =>{
       this.tiles = [];
       for(let entity of response.data){
-        let tile = new Tile(entity.x, entity.y, entity.q, entity.biome, entity.housingMax, entity.farmlandMax, this.container, entity.stateId, entity.connectedTiles, entity.colourId, false, this.game);
+        let tile = new Tile(entity.x, entity.y, entity.q, entity.biome, entity.housingMax, entity.farmlandMax, this.container, entity.stateId, entity.connectedTiles, entity.hexcode, false, this.game);
         this.tiles[entity.id] = tile;
       }
       this.render();  

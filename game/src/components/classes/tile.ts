@@ -1,5 +1,5 @@
-import { Container, Graphics, Sprite, Text } from "pixi.js";
-import { blueSelector, grassTexture, greenSelector, houseTexture, missingTexture, orangeSelector, purpleSelector, redSelector, sandTexture, stoneTexture, waterTexture, yellowSelector } from "../handlers/texturesHandler";
+import { Container, Graphics, Sprite, Text, filters } from "pixi.js";
+import { grassTexture, houseTexture, missingTexture, sandTexture, selectorTexture, stoneTexture, waterTexture } from "../handlers/texturesHandler";
 import { GameHandler } from "../handlers/gameHandler";
 
 class Tile {
@@ -24,12 +24,12 @@ class Tile {
   connectedTiles: number[];
   housingMax: number;
   farmlandMax: number;
-  colourId:number;
+  hexcode:number;
   isCapital:boolean;
 
 
 
-  constructor(x: number, y: number, q: number, biome:string, housingMax:number, farmlandMax:number, stage: Container, stateId: number|null, connectedTiles: number[], colourId: number, isCapital:boolean, game: GameHandler) {
+  constructor(x: number, y: number, q: number, biome:string, housingMax:number, farmlandMax:number, stage: Container, stateId: number|null, connectedTiles: number[], hexcode: number, isCapital:boolean, game: GameHandler) {
     this.x = x;
     this.y = y;
     this.q = q;
@@ -37,7 +37,7 @@ class Tile {
     this.housingMax = housingMax;
     this.farmlandMax = farmlandMax;
     this.biome = biome;
-    this.colourId = colourId;
+    this.hexcode = hexcode;
     this.isCapital = isCapital;
 
     this.stateId = stateId;
@@ -79,30 +79,10 @@ class Tile {
         yindex * this.spriteHeight + this.spriteHeight / 4 - heightOffset + (yindex * this.gapPixels);
     }
 
-    if(this.stateId != null && this.colourId != null){
-      let sprite;
-      switch(this.colourId){
-        case 1:
-          sprite = Sprite.from(blueSelector);
-          break;
-        case 2:
-          sprite = Sprite.from(greenSelector);
-          break;
-        case 3:
-          sprite = Sprite.from(orangeSelector);
-          break;
-        case 4:
-          sprite = Sprite.from(purpleSelector);
-          break;
-        case 5:
-          sprite = Sprite.from(redSelector);
-          break;
-        case 6:
-          sprite = Sprite.from(yellowSelector);
-          break;
-        default:
-          sprite = Sprite.from(blueSelector);
-      }
+    if(this.stateId != null && this.hexcode != null){
+      let sprite = Sprite.from(selectorTexture);
+      sprite.tint = this.hexcode;
+
       sprite.width = this.spriteWidth;
       sprite.height = this.spriteHeight;
       sprite.x = this.sprite.x;

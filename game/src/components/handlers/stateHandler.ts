@@ -20,7 +20,7 @@ class StateHandler {
       this.states = [];
 
       for(let entity of response.data){
-        let state = new State(entity.id, entity.capitalId, entity.controllerId, entity.tileIds, entity.colourId, entity.decisions);
+        let state = new State(entity.id, entity.capitalId, entity.controllerId, entity.tileIds, entity.hexcode, entity.decisions);
         this.states[entity.id] = state;
       }
       this.renderStates();
@@ -39,7 +39,7 @@ class StateHandler {
           tile.isCapital = true;
         }
         tile.stateId = state.id;
-        tile.colourId = state.colourId;
+        tile.hexcode = state.hexcode;
         this.game.worldHandler.setTile(tileId, tile);
         tile.render();
       }

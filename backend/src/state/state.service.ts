@@ -13,6 +13,15 @@ export class StateService {
 
   constructor(private readonly tileService: TileService) {}
 
+  getRandomHexCode() {
+    const letters = "0123456789ABCDEF";
+    let tint = 0;
+    for (let i = 0; i < 6; i++) {
+      tint = (tint << 4) | letters.indexOf(letters[Math.floor(Math.random() * 16)]);
+    }
+    return tint;
+  }
+  
   async initStates(amount:number){
     for(let i = 1; i < amount; i++){
       const tile = await this.tileService.getRandomCapitalTile(i);
@@ -20,7 +29,7 @@ export class StateService {
         id: i,
         capitalId: tile.id,
         tileIds: [tile.id],
-        colourId: i % 6 + 1,
+        hexcode: this.getRandomHexCode(),
         decisions: []
       });
       this.tileService.setStateId(tile.id, i);
