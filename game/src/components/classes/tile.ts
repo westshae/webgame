@@ -79,7 +79,7 @@ class Tile {
         yindex * this.spriteHeight + this.spriteHeight / 4 - heightOffset + (yindex * this.gapPixels);
     }
 
-    if(this.stateId != null){
+    if(this.stateId != null && this.colourId != null){
       let sprite;
       switch(this.colourId){
         case 1:

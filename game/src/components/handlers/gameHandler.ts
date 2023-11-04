@@ -27,13 +27,12 @@ class GameHandler {
     if(this.jwtToken == null || this.email == null){
       return;
     }
-    this.worldHandler.loadWorld();
-    this.stateHandler.loadStates();
-    this.tick();
-    this.beginLoop();
-    console.log(this.email);
-    console.log(this.jwtToken);
-    window.open("www.google.com", '_blank');
+    window.history.replaceState({}, document.title, window.location.pathname);
+    this.worldHandler.loadWorld().then(()=>{
+      this.stateHandler.loadStates();
+      this.tick();
+      this.beginLoop();  
+    })
   }
 
   beginLoop(){
