@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { Not, Repository } from "typeorm";
 import "dotenv/config";
 import { TileService } from "src/tile/tile.service";
 import { StateEntity } from "./state.entity";
@@ -55,6 +55,31 @@ export class StateService {
       }
     }
   }
+
+  async getControlledStates(email: string){
+    let entities = await this.stateRepo.find({
+      controllerId: email
+    });
+
+    if(entities.length != 0){
+      return entities;
+    } else {
+      return await this.giveControlledStates(email);
+    }
+  }
+
+  async giveControlledStates(email:string){
+    let entities = await this.stateRepo.find({
+      controllerId: null
+    });
+
+    let index = randomInt(entities.length);
+    let entity = entities[index];
+    entity.controllerId = email;
+    await this.stateRepo.save(entity);
+    return entity;
+  }
+
 
   async addDecisionToAllStates(){
     let stateEntities = await this.getAllStates();

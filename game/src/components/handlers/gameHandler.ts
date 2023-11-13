@@ -1,21 +1,21 @@
 import { Application } from 'pixi.js';
 import { WorldHandler } from './worldHandler';
 import { DisplayHandler } from './displayHandler';
-import { DebugHandler } from './debugHandler';
+import { HudHandler } from './hudHandler';
 import { StateHandler } from './stateHandler';
 
 class GameHandler {
   app: Application;
   worldHandler: WorldHandler;
   displayHandler: DisplayHandler;
-  debugHandler: DebugHandler;
+  hudHandler: HudHandler;
   stateHandler: StateHandler
   email:string | null;
   jwtToken:string | null;
 
   constructor(email:string | null, jwtToken:string | null) {
     this.app = new Application();
-    this.debugHandler = new DebugHandler(this);
+    this.hudHandler = new HudHandler(this);
     this.worldHandler = new WorldHandler(this);
     this.displayHandler = new DisplayHandler();
     this.stateHandler = new StateHandler(this);
@@ -23,16 +23,21 @@ class GameHandler {
     this.jwtToken = jwtToken;
   }
 
-  init(){
+  async init(){
     if(this.jwtToken == null || this.email == null){
       return;
     }
-    window.history.replaceState({}, document.title, window.location.pathname);
-    this.worldHandler.loadWorld().then(()=>{
-      this.stateHandler.loadStates();
-      this.tick();
-      this.beginLoop();  
-    })
+    // window.history.replaceState({}, document.title, window.location.pathname);
+    await this.worldHandler.loadWorld();
+    await this.stateHandler.getOwnedStates();
+    await this.tick();
+    await this.beginLoop();
+    // this.worldHandler.loadWorld().then(async ()=>{
+    //   // this.stateHandler.loadStates();
+    //   await this.stateHandler.getOwnedStates();
+    //   this.tick();
+    //   this.beginLoop();  
+    // })
   }
 
   beginLoop(){
@@ -43,8 +48,8 @@ class GameHandler {
 
   tick(){
     this.worldHandler.updateWorldValues();
-    this.debugHandler.refreshDebugHolder();
-    this.stateHandler.loadStates();
+    this.hudHandler.refreshHolder();
+    // this.stateHandler.loadStates();
   }
 
   render(){

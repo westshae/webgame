@@ -15,6 +15,21 @@ class StateHandler {
     this.states = [];
   }
 
+  async getOwnedStates(){
+    await axios.get("http://localhost:5000/state/getControlledStates", {params: {email: this.game.email, jwt: this.game.jwtToken}}).then((response) =>{
+
+      for(let entity of response.data){
+        let state = new State(entity.id, entity.capitalId, entity.controllerId, entity.tileIds, entity.hexcode, entity.decisions);
+        this.states[entity.id] = state;
+
+      }
+
+      console.log(response.data);
+    })
+    console.log(this.states);
+    this.renderStates();
+  }
+
   async loadStates() {
     axios.get("http://localhost:5000/state/getStates").then((response) =>{
       this.states = [];

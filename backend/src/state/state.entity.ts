@@ -8,8 +8,8 @@ export class StateEntity {
     @Column('integer')
     capitalId: number;
 
-    @Column('integer', {nullable: true})
-    controllerId:number;
+    @Column({nullable: true})
+    controllerId:string;
 
     @Column('integer', {array: true})
     tileIds: number[];
