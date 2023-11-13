@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Not, Repository } from "typeorm";
+import { In, Not, Repository } from "typeorm";
 import "dotenv/config";
 import { TileEntity } from "./tile.entity";
 import { randomInt } from "crypto";
@@ -141,6 +141,37 @@ export class TileService {
       tileEntity.stateId
     )
     return tile;
+  }
+
+  async getAllTilesWithinDistance(tileId:number, distance:number){
+    let ids = await this.getAllTilesWithinDistanceHelper(tileId, distance);
+    const tiles = await this.tileRepo.find({
+      where: {
+        id: In([...ids]),
+      },
+    });
+
+    return tiles;
+  }
+
+  private async getAllTilesWithinDistanceHelper(tileId:number, distance:number){
+    let tile = await this.tileRepo.findOne({
+      id:tileId
+    });
+
+    if(distance == 0){
+      let tiles = new Set<number>();
+      tiles.add(tileId);
+      return tiles;
+    } else {
+      let set = new Set<number>();
+      set.add(tileId);
+      for(let id of tile.connectedTiles){
+        let newSet = await this.getAllTilesWithinDistanceHelper(id, distance-1);
+        set = new Set<number>([...set, ...newSet]);
+      }
+      return set;
+    }
   }
 
   async getTileFromId(id: number){

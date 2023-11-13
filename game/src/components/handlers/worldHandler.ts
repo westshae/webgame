@@ -14,8 +14,9 @@ class WorldHandler {
     this.tiles = [];
   }
 
-  async loadWorld() {
-    axios.get("http://localhost:5000/tile/getWorld").then((response) =>{
+  async loadWorld(){
+    
+    await axios.get("http://localhost:5000/state/getStateTiles", {params:{email: this.game.email, jwt: this.game.jwtToken}}).then((response) =>{
       this.tiles = [];
       for(let entity of response.data){
         let tile = new Tile(entity.x, entity.y, entity.q, entity.biome, entity.housingMax, entity.farmlandMax, this.container, entity.stateId, entity.connectedTiles, entity.hexcode, false, this.game);
@@ -23,23 +24,7 @@ class WorldHandler {
       }
       this.render();  
     })
-
-  }
-
-  async updateWorldValues(){
-    const response = await axios.get("http://localhost:5000/tile/getWorld");
-
-    for(let entity of response.data){
-      let tile = this.tiles[entity.id];
-      if(tile == null){
-        continue;
-      }
-
-      tile.housingMax = entity.housingMax;
-      tile.farmlandMax = entity.farmlandMax;
-      tile.biome = entity.biome;
-      this.tiles[entity.id] = tile;
-    }
+    this.game.stateHandler.renderStates();
   }
 
   setTile(id:number, tile:Tile){

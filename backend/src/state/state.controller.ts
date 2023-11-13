@@ -57,24 +57,24 @@ export class StateController {
   async getControlledStates(@Query('email') email, @Query('jwt') jwt){
     try{
       if(!this.authService.checkToken(email, jwt)){
-        console.log("restasdasdasdasdasd");
-        console.log("restasdasdasdasdasd");
-        console.log("restasdasdasdasdasd");
-        console.log("restasdasdasdasdasd");
-        console.log("restasdasdasdasdasd");
-        console.log("restasdasdasdasdasd");
-        console.log("restasdasdasdasdasd");
-        console.log("restasdasdasdasdasd");
-        console.log("restasdasdasdasdasd");
-        console.log("restasdasdasdasdasd");
-        console.log("restasdasdasdasdasd");
-        console.log("restasdasdasdasdasd");
-
-        return "weird ass string";
+        return;
       }
       return await this.stateService.getControlledStates(email);
     }catch(e){
       console.error(e);
     }
   }
+
+  @Get("getStateTiles")
+  async getStateTiles(@Query('email') email, @Query('jwt') jwt){
+    try{
+      if(!this.authService.checkToken(email, jwt)){
+        return;
+      }
+      return await this.stateService.getStateTiles(email);
+    }catch(e){
+      console.error(e);
+    }
+  }
+
 }

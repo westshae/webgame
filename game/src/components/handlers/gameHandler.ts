@@ -28,16 +28,10 @@ class GameHandler {
       return;
     }
     // window.history.replaceState({}, document.title, window.location.pathname);
-    await this.worldHandler.loadWorld();
     await this.stateHandler.getOwnedStates();
+    await this.worldHandler.loadWorld();
     await this.tick();
     await this.beginLoop();
-    // this.worldHandler.loadWorld().then(async ()=>{
-    //   // this.stateHandler.loadStates();
-    //   await this.stateHandler.getOwnedStates();
-    //   this.tick();
-    //   this.beginLoop();  
-    // })
   }
 
   beginLoop(){
@@ -47,9 +41,8 @@ class GameHandler {
   }
 
   tick(){
-    this.worldHandler.updateWorldValues();
     this.hudHandler.refreshHolder();
-    // this.stateHandler.loadStates();
+    this.stateHandler.getOwnedStates();
   }
 
   render(){

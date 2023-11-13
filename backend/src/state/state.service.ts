@@ -5,6 +5,8 @@ import "dotenv/config";
 import { TileService } from "src/tile/tile.service";
 import { StateEntity } from "./state.entity";
 import { randomInt } from "crypto";
+import { take } from "rxjs";
+import { Tile } from "src/tile/tile";
 
 @Injectable()
 export class StateService {
@@ -64,7 +66,7 @@ export class StateService {
     if(entities.length != 0){
       return entities;
     } else {
-      return await this.giveControlledStates(email);
+      return [await this.giveControlledStates(email)];
     }
   }
 
@@ -117,6 +119,30 @@ export class StateService {
     }
     const removedDecision = decisions.splice(index, 1)[0]; 
     console.log(JSON.parse(removedDecision).question);
+  }
+
+  async getStateTiles(email:string){
+    let stateEntities = await this.getControlledStates(email);
+
+    let tiles = [];
+    for(let entity of stateEntities){
+      let nearTiles = await this.tileService.getAllTilesWithinDistance(entity.capitalId, 3);
+      for (let tileInfo of nearTiles) {
+        const tile = new Tile(
+          tileInfo.id,
+          tileInfo.x,
+          tileInfo.y,
+          tileInfo.q,
+          tileInfo.connectedTiles,
+          tileInfo.biome,
+          tileInfo.housingMax,
+          tileInfo.farmlandMax,
+          tileInfo.stateId
+        )
+        tiles.push(tile);
+      }
+    }
+    return tiles;
   }
 
   async getAllStates(){
