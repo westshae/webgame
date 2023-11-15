@@ -126,7 +126,7 @@ export class StateService {
 
     let tiles = [];
     for(let entity of stateEntities){
-      let nearTiles = await this.tileService.getAllTilesWithinDistance(entity.capitalId, 3);
+      let nearTiles = await this.tileService.getAllTilesWithinDistance(entity.capitalId, 6);
       for (let tileInfo of nearTiles) {
         const tile = new Tile(
           tileInfo.id,
