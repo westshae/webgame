@@ -5,16 +5,6 @@ import { AuthService } from "src/auth/auth.service";
 export class StateController {
   constructor(private readonly stateService: StateService, private readonly authService: AuthService) {}
 
-  //TODO To Remove
-  @Get("getStates")
-  async getStates(){
-    try{
-      return await this.stateService.getAllStates();
-    }catch(e){
-      console.error(e);
-    }
-  }
-
   @Get("getDecisionCount")
   async getDecisionCount(@Query('stateId') stateId, @Query('email') email, @Query('jwt') jwt){
     try{

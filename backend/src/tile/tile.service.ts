@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { In, Not, Repository } from "typeorm";
+import { Between, In, Not, Repository } from "typeorm";
 import "dotenv/config";
 import { TileEntity } from "./tile.entity";
 import { randomInt } from "crypto";
@@ -143,35 +143,71 @@ export class TileService {
     return tile;
   }
 
-  async getAllTilesWithinDistance(tileId:number, distance:number){
-    let ids = await this.getAllTilesWithinDistanceHelper(tileId, distance);
+  // async getAllTilesWithinDistance(tileId: number, distance: number) {
+  //   const centralTile = await this.tileRepo.findOne({ id: tileId });
+  //   if (!centralTile) {
+  //     return [];
+  //   }
+  
+  //   const tiles = await this.tileRepo.find({
+  //     where: {
+  //       x: Between(centralTile.x - distance, centralTile.x + distance),
+  //       y: Between(centralTile.y - distance, centralTile.y + distance),
+  //       q: Between(centralTile.q - distance, centralTile.q + distance),
+  //     },
+  //   });
+  
+
+  //   return tiles;
+  // }
+
+  async getAllTilesWithinDistance(tileId: number, distance: number) {
+    const centralTile = await this.tileRepo.findOne({ id: tileId });
+    if (!centralTile) {
+      return [];
+    }
+  
+    // Calculate the range for axial coordinates
+    const xRange = [centralTile.x - distance, centralTile.x + distance];
+    const yRange = [centralTile.y - distance, centralTile.y + distance];
+  
+    // Filter tiles within the specified range
     const tiles = await this.tileRepo.find({
       where: {
-        id: In([...ids]),
+        x: Between(xRange[0], xRange[1]),
+        y: Between(yRange[0], yRange[1]),
       },
     });
 
-    return tiles;
-  }
-
-  private async getAllTilesWithinDistanceHelper(tileId:number, distance:number){
-    let tile = await this.tileRepo.findOne({
-      id:tileId
-    });
-
-    if(distance == 0){
-      let tiles = new Set<number>();
-      tiles.add(tileId);
-      return tiles;
-    } else {
-      let set = new Set<number>();
-      set.add(tileId);
-      for(let id of tile.connectedTiles){
-        let newSet = await this.getAllTilesWithinDistanceHelper(id, distance-1);
-        set = new Set<number>([...set, ...newSet]);
+    const filteredTiles = tiles.filter((tile) => {
+      let tempDistance = distance - Math.abs(centralTile.y - tile.y)/2
+      tile.farmlandMax = tempDistance
+      if(centralTile.y % 2 !== tile.y % 2){
+        if(tile.y < centralTile.y){// top
+          if(tile.x < centralTile.x - tempDistance){
+            if(centralTile.y % 2 == 1){
+              return false;
+            }
+          }  
+        } else {
+          if(tile.x > centralTile.x + tempDistance){
+            if(centralTile.y % 2 == 0){
+              return false;
+            }
+          }
+        }
       }
-      return set;
-    }
+
+      const q = tile.x - Math.floor((tile.y - (tile.y & 1)) / 2);
+      const centralQ = centralTile.x - Math.floor((centralTile.y - (centralTile.y & 1)) / 2);
+  
+      const dx = Math.abs(tile.x - centralTile.x);
+      const dy = Math.abs(tile.y - centralTile.y);
+  
+      return dx + Math.floor(dy / 2) <= distance && Math.abs(q - centralQ) <= distance;
+    });
+  
+    return filteredTiles;
   }
 
   async getTileFromId(id: number){
