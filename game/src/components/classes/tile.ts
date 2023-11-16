@@ -99,7 +99,7 @@ class Tile {
 
       house.on("pointerdown", (event: any) => this.handlePointerDown(event));
       house.on("pointerup", (event: any) => this.handleTileInfo(event));
-      house.zIndex = 100
+      house.zIndex = 10
 
       house.width = this.spriteWidth;
       house.height = this.spriteHeight;
@@ -134,7 +134,7 @@ class Tile {
     this.recentMouseY = event.data.originalEvent.clientY;
   }
 
-  handleTileInfo(event: { data: { originalEvent: { clientX: number | undefined; clientY: number | undefined; }; }; }) {
+  async handleTileInfo(event: { data: { originalEvent: { clientX: number | undefined; clientY: number | undefined; }; }; }) {
     if(!(this.recentMouseX == event.data.originalEvent.clientX && this.recentMouseY == event.data.originalEvent.clientY)){
       return;
     }
@@ -146,7 +146,7 @@ class Tile {
     this.createBackground();
 
     if(this.isCapital){
-      this.createCapitalInfobox();
+      await this.createCapitalInfobox();
     } else {
       this.createTileInfobox();
     }
@@ -191,15 +191,70 @@ class Tile {
 
   }
 
-  createCapitalInfobox(){
+  async createCapitalInfobox(){
     if(this.infobox == null || this.stateId == null){
       return;
     }
 
-    let decisionCount: Text = new Text("Decision Count: " + this.game.stateHandler.states[this.stateId].decisions.length);
+    let decisionCount: Text = new Text("Decision Count: " + await this.game.stateHandler.states[this.stateId].getDecisionCount());
     decisionCount.position.set(0, 80);
     this.infobox.addChild(decisionCount);
 
+    let getDecisionButton = new Graphics();
+
+    getDecisionButton.beginFill(0x900000);
+
+    getDecisionButton.drawCircle(0, 40, 20);
+
+    getDecisionButton.interactive = true;
+
+    getDecisionButton.on("pointerdown", async () => {
+      if(this.stateId == null || this.game.email == null || this.game.jwtToken == null){
+        return;
+      }
+      let decision = await this.game.stateHandler.states[this.stateId].getFirstDecision()
+      console.log(decision);
+      let complete = await this.game.stateHandler.states[this.stateId].completeDecision(this.stateId, decision.id, 1, this.game.email, this.game.jwtToken);
+      //TODO create decision box
+      this.createDecisionInfobox();
+    });
+    this.infobox.addChild(getDecisionButton);
+  }
+
+  async createDecisionInfobox(){
+    if(this.stateId == null || this.infobox == null){
+      return;
+    }
+    this.handleClose();
+    this.resetInfobox();
+    this.createBackground();
+
+    let decision = await this.game.stateHandler.states[this.stateId].getFirstDecision();
+
+    let decisionText: Text = new Text(decision.question);
+    decisionText.position.set(0, -10);
+    this.infobox.addChild(decisionText);
+
+    for(let i = 0; i < 2; i++){
+      let button = new Graphics();
+      button.beginFill(0x900000);
+
+      button.drawCircle(i * 50, 120, 20);
+  
+      button.interactive = true;
+  
+      button.on("pointerdown", () => {
+        if(this.stateId == null || this.game.email == null || this.game.jwtToken == null){
+          return;
+        }  
+        this.game.stateHandler.states[this.stateId].completeDecision(this.stateId, decision.id, i, this.game.email, this.game.jwtToken);
+        this.handleClose();
+      });
+      this.infobox.addChild(button);
+  
+    }
+
+    this.createCloseButton();
   }
 
   createTileInfobox(){

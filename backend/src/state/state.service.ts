@@ -58,6 +58,27 @@ export class StateService {
     }
   }
 
+  async giveStateNewTile(stateId){
+    let entity = await this.stateRepo.findOne({
+      id: stateId
+    });
+
+    let count = 0
+    while (count < 10){
+      let tile = await this.tileService.getTileFromId(entity.tileIds[randomInt(entity.tileIds.length)]);
+
+      let newTileId = tile.connectedTiles[randomInt(tile.connectedTiles.length)];
+      let newTile = await this.tileService.getTileFromId(newTileId);
+      if(newTile.stateId == null){
+        this.tileService.setStateId(newTileId, entity.id);
+        entity.tileIds.push(newTileId);
+        this.stateRepo.save(entity);
+        break;
+      }
+      count++;
+    }
+  }
+
   async getControlledStates(email: string){
     let entities = await this.stateRepo.find({
       controllerId: email
@@ -113,11 +134,13 @@ export class StateService {
   async completeDecision(stateId:number, decisionId:number, optionNumber:number){
     let entity = await this.stateRepo.findOne({id:stateId});
     let decisions = entity.decisions;
-    const index = decisions.findIndex(decision => JSON.parse(decision).id === stateId);
+    const index = decisions.findIndex(decision => JSON.parse(decision).id === decisionId);
     if(index == -1){
       return;
     }
     const removedDecision = decisions.splice(index, 1)[0]; 
+    
+    this.giveStateNewTile(stateId);
     console.log(JSON.parse(removedDecision).question);
   }
 

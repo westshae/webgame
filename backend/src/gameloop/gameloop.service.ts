@@ -25,7 +25,6 @@ export class GameloopService implements OnModuleInit {
   }
 
   tick() {
-    this.stateService.giveAllStatesNewTile();
     this.stateService.addDecisionToAllStates();
   }
 }

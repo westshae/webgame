@@ -19,7 +19,7 @@ class StateHandler {
     await axios.get("http://localhost:5000/state/getControlledStates", {params: {email: this.game.email, jwt: this.game.jwtToken}}).then((response) =>{
 
       for(let entity of response.data){
-        let state = new State(entity.id, entity.capitalId, entity.controllerId, entity.tileIds, entity.hexcode, entity.decisions);
+        let state = new State(entity.id, entity.capitalId, entity.controllerId, entity.tileIds, entity.hexcode, this.game);
         this.states[entity.id] = state;
 
       }
