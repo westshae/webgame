@@ -143,7 +143,6 @@ class Tile {
     }
 
     this.resetInfobox();
-
     this.createBackground();
 
     if(this.isCapital){
@@ -151,9 +150,6 @@ class Tile {
     } else {
       this.createTileInfobox();
     }
-
-  
-    this.createTileInfobox();
 
     this.createCloseButton();
   }
