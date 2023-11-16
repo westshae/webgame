@@ -99,7 +99,7 @@ class Tile {
 
       house.on("pointerdown", (event: any) => this.handlePointerDown(event));
       house.on("pointerup", (event: any) => this.handleTileInfo(event));
-  
+      house.zIndex = 100
 
       house.width = this.spriteWidth;
       house.height = this.spriteHeight;
@@ -141,16 +141,49 @@ class Tile {
     if(this.infobox != null){
       return;
     }
+
+    this.resetInfobox();
+
+    this.createBackground();
+
+    if(this.isCapital){
+      this.createCapitalInfobox();
+    } else {
+      this.createTileInfobox();
+    }
+
+  
+    this.createTileInfobox();
+
+    this.createCloseButton();
+  }
+
+  resetInfobox(){
     this.infobox = new Container();
     this.infobox.zIndex = 10;
     this.infobox.setTransform(this.sprite.x + 50, this.sprite.y-50)
-    let closeButton = new Graphics();
+    this.stage.addChild(this.infobox);
+  }
 
+  createBackground(){
+    if(this.infobox == null){
+      return;
+    }
     let background = new Graphics();
 
     background.beginFill(0xFFFDD0); // Cream color
     background.drawRect(-20, -30, 350, 170);
     background.endFill();
+
+    this.infobox.addChild(background);
+
+  }
+
+  createCloseButton(){
+    if(this.infobox == null){
+      return;
+    }
+    let closeButton = new Graphics();
 
     closeButton.beginFill(0x900000);
 
@@ -159,7 +192,25 @@ class Tile {
     closeButton.interactive = true;
 
     closeButton.on("pointerdown", () => this.handleClose());
-  
+    this.infobox.addChild(closeButton);
+
+  }
+
+  createCapitalInfobox(){
+    if(this.infobox == null || this.stateId == null){
+      return;
+    }
+
+    let decisionCount: Text = new Text("Decision Count: " + this.game.stateHandler.states[this.stateId].decisions.length);
+    decisionCount.position.set(0, 80);
+    this.infobox.addChild(decisionCount);
+
+  }
+
+  createTileInfobox(){
+    if(this.infobox == null){
+      return;
+    }
     let title: Text = new Text("Tile Information");
     let coords: Text = new Text("X-Y-Q: " + this.x + "-" + this.y + "-" + this.q);
     let biome: Text = new Text("Biome: " + this.biome);
@@ -173,22 +224,12 @@ class Tile {
     housing.position.set(0, 40);
     farmland.position.set(0, 60);
 
-    this.infobox.addChild(background);
     this.infobox.addChild(title);
     this.infobox.addChild(coords);
     this.infobox.addChild(biome);
     this.infobox.addChild(housing);
     this.infobox.addChild(farmland);
 
-    if(this.stateId != null && this.isCapital){
-      let decisionCount: Text = new Text("Decision Count: " + this.game.stateHandler.states[this.stateId].decisions.length);
-      decisionCount.position.set(0, 80);
-      this.infobox.addChild(decisionCount);
-    }
-
-
-    this.infobox.addChild(closeButton);
-    this.stage.addChild(this.infobox);
   }
 
   handleClose(){

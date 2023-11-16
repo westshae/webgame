@@ -14,8 +14,6 @@ class HudHandler {
     this.stage = game.app.stage;
     this.game = game;
     this.container = new Container();
-
-    // this.refreshHolder();
   }
 
   refreshHolder(){
