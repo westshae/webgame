@@ -32,6 +32,7 @@ class GameHandler {
     await this.worldHandler.loadWorld();
     await this.tick();
     await this.beginLoop();
+    await this.hudHandler.loadHud();
   }
 
   beginLoop(){
@@ -41,7 +42,6 @@ class GameHandler {
   }
 
   tick(){
-    this.hudHandler.refreshHolder();
     this.stateHandler.getOwnedStates();
   }
 

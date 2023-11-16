@@ -3,23 +3,31 @@ import { GameHandler } from './gameHandler';
 
 class HudHandler {
   stage: Container;
-  container: Container;
+  leftContainer: Container;
+  rightContainer: Container;
   game: GameHandler;
 
 
   constructor(game:GameHandler) {
     this.stage = game.app.stage;
     this.game = game;
-    this.container = new Container();
+    this.leftContainer = new Container();
+    this.stage.addChild(this.leftContainer);
+
+    this.rightContainer = new Container();
+    this.stage.addChild(this.rightContainer);
   }
 
-  refreshHolder(){
-    this.stage.removeChild(this.container)
-    this.container = new Container();
+  loadHud(){
+    this.loadLeftSidebar();
+    this.loadRightSidebar();
+  }
+
+  loadRightSidebar(){
 
     let screenWidth = this.game.app.view.width;
 
-    this.container.x = screenWidth-200;
+    this.leftContainer.x = screenWidth-200;
 
 
     let title: Text = new Text("States Owned");
@@ -33,19 +41,34 @@ class HudHandler {
       button.beginFill(state.hexcode);
       button.drawCircle(-20, y, 20);
       button.interactive = true;
-      this.container.addChild(button);
+      this.leftContainer.addChild(button);
 
       y += 50;
     }
 
-
-    this.container.addChild(title);
-
-    this.stage.addChild(this.container)
+    this.leftContainer.addChild(title);
   }
 
-  async getOwnedStates(){
+  loadLeftSidebar(){
+    let title: Text = new Text("States Owned");
+
+    title.position.set(0, 0);
+
+    let y = 50;
+
+    for(let state of Object.values(this.game.stateHandler.states)){
+      let button = new Graphics();
+      button.beginFill(state.hexcode);
+      button.drawCircle(20, y, 20);
+      button.interactive = true;
+      this.rightContainer.addChild(button);
+
+      y += 50;
+    }
+
+    this.rightContainer.addChild(title);
   }
+
 }
 
 export { HudHandler };
