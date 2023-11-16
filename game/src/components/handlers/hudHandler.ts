@@ -1,8 +1,5 @@
 import { Container, Graphics, Text } from 'pixi.js';
-import { Decision } from '../classes/decision';
-import axios from 'axios';
 import { GameHandler } from './gameHandler';
-import { State } from '../classes/state';
 
 class HudHandler {
   stage: Container;
@@ -36,7 +33,6 @@ class HudHandler {
       button.beginFill(state.hexcode);
       button.drawCircle(-20, y, 20);
       button.interactive = true;
-      // startTickLoopButton.on("pointerdown", () => this.handleTickLoop());
       this.container.addChild(button);
 
       y += 50;

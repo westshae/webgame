@@ -172,7 +172,6 @@ class Tile {
     background.endFill();
 
     this.infobox.addChild(background);
-
   }
 
   createCloseButton(){
