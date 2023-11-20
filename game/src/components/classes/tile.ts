@@ -52,7 +52,8 @@ class Tile {
 
     this.sprite.interactive = true;
     this.sprite.on("pointerdown", (event: any) => this.handlePointerDown(event));
-    this.sprite.on("pointerup", (event: any) => this.handleTileInfo(event));
+    this.sprite.on("pointerup", (event: any) => this.handleWhichMenuType(event));
+
     this.infobox = null;
 
     this.game = game;
@@ -87,18 +88,12 @@ class Tile {
       sprite.height = this.spriteHeight;
       sprite.x = this.sprite.x;
       sprite.y = this.sprite.y;
-
-      sprite.on("pointerdown", (event: any) => this.handlePointerDown(event));
-      sprite.on("pointerup", (event: any) => this.handleTileInfo(event));
   
       this.stage.addChild(sprite);
     }
 
     if(this.isCapital){
       let house = Sprite.from(houseTexture);
-
-      house.on("pointerdown", (event: any) => this.handlePointerDown(event));
-      house.on("pointerup", (event: any) => this.handleTileInfo(event));
       house.zIndex = 10
 
       house.width = this.spriteWidth;
@@ -132,6 +127,21 @@ class Tile {
   handlePointerDown(event: { data: { originalEvent: { clientX: number | undefined; clientY: number | undefined; }; }; }){
     this.recentMouseX = event.data.originalEvent.clientX;
     this.recentMouseY = event.data.originalEvent.clientY;
+  }
+
+  handleWhichMenuType(event: { data: { originalEvent: { clientX: number | undefined; clientY: number | undefined; }; }; }){
+    if(!(this.recentMouseX == event.data.originalEvent.clientX && this.recentMouseY == event.data.originalEvent.clientY)){
+      return;
+    }
+
+    if(this.stateId != null && this.hexcode != null){
+      this.game.hudHandler.loadTileInfoMenu(this);
+    }
+    if(this.isCapital && this.stateId != null){
+      this.game.hudHandler.loadCapitalInfoMenu(this, this.stateId);
+    } else {
+      this.game.hudHandler.loadTileInfoMenu(this);
+    }
   }
 
   async handleTileInfo(event: { data: { originalEvent: { clientX: number | undefined; clientY: number | undefined; }; }; }) {
