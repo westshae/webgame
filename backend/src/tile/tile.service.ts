@@ -144,19 +144,21 @@ export class TileService {
     return filteredTiles;
   }
 
+  getAllAdjacentCoordinates(x:number, y:number){
+    const adjacentCoordinates = [
+      [x, y - 1], // Left
+      [x, y + 1], // Right
+      [x - 1, y], // Above
+      [x + 1, y], // Below
+      y % 2 === 0 ? [x - 1, y - 1] : [x + 1, y - 1], // Top-left (if j is even) or Top-right (if j is odd)
+      y % 2 === 0 ? [x - 1, y + 1] : [x + 1, y + 1], // Bottom-left (if y is even) or Bottom-right (if j is odd)
+    ];
+    return adjacentCoordinates;
+  }
+
   async getAllAdjacentTiles(tileId:number){
     const tile = await this.tileRepo.findOne({id:tileId});
-
-    const i = tile.x;
-    const j = tile.y;
-    const adjacentCoordinates = [
-      [i, j - 1], // Left
-      [i, j + 1], // Right
-      [i - 1, j], // Above
-      [i + 1, j], // Below
-      j % 2 === 0 ? [i - 1, j - 1] : [i + 1, j - 1], // Top-left (if j is even) or Top-right (if j is odd)
-      j % 2 === 0 ? [i - 1, j + 1] : [i + 1, j + 1], // Bottom-left (if j is even) or Bottom-right (if j is odd)
-    ];
+    const adjacentCoordinates = this.getAllAdjacentCoordinates(tile.x, tile.y);
 
     const promises = [];
 

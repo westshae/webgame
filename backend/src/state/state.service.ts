@@ -54,7 +54,7 @@ export class StateService {
     while (count < 10){
       let adjacentTiles = await this.tileService.getAllAdjacentTiles(entity.tileIds[randomInt(entity.tileIds.length)]);
       let newTile = adjacentTiles[randomInt(adjacentTiles.length)];
-      if(newTile.stateId == null){
+      if(newTile != null && newTile.stateId == null){
         this.tileService.setStateId(newTile.id, entity.id);
         entity.tileIds.push(newTile.id);
         this.stateRepo.save(entity);
