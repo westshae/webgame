@@ -36,22 +36,6 @@ export class TileService {
       }
     }
     await this.tileRepo.insert(tilesToInsert);
-    // let count = 0;
-    // for (let i = 0; i < size; i++) {
-    //   for (let j = 0; j < size; j++) {
-    //     this.tileRepo.insert({
-    //       id: count,
-    //       x: i,
-    //       y: j,
-    //       q: i - (j - (j & 1)) / 2,
-    //       housingMax: randomInt(99),
-    //       biome: this.determineBiome(i,j, noise),
-    //       farmlandMax: randomInt(99),
-    //       stateId: null,
-    //     });
-    //     count++;
-    //   }
-    // }
   }
 
   determineBiome(x: number, y: number, noise: NoiseFunction2D) {
