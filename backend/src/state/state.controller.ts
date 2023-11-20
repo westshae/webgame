@@ -32,12 +32,12 @@ export class StateController {
   }
 
   @Post("completeDecision")
-  completeDecision(@Body() data: { stateId: number, decisionId: number, optionNumber:number, email:string, jwt:string }){
+  async completeDecision(@Body() data: { stateId: number, decisionId: number, optionNumber:number, email:string, jwt:string }){
     try{
       if(!this.authService.checkToken(data.email, data.jwt)){
         return;
       }
-      this.stateService.completeDecision(data.stateId, data.decisionId, data.optionNumber);
+      await this.stateService.completeDecision(data.stateId, data.decisionId, data.optionNumber);
     }catch(e){
       console.error(e);
     }

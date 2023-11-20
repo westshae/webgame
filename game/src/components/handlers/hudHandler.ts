@@ -95,6 +95,7 @@ class HudHandler {
           return;
         }  
         this.game.stateHandler.states[stateId].completeDecision(stateId, decision.id, i, this.game.email, this.game.jwtToken);
+        console.log(i);
         this.handleClose();
       });
     }

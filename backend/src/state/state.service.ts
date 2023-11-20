@@ -100,7 +100,8 @@ export class StateService {
     let entity = await this.stateRepo.findOne({id:stateId});
     let decision = {
       id: randomInt(99999999),
-      question:"questionhere"
+      question:"questionhere",
+      actionType: 0
     }
     entity.decisions.push(JSON.stringify(decision));
     this.stateRepo.save(entity);
@@ -118,14 +119,17 @@ export class StateService {
 
   async completeDecision(stateId:number, decisionId:number, optionNumber:number){
     let entity = await this.stateRepo.findOne({id:stateId});
-    let decisions = entity.decisions;
-    const index = decisions.findIndex(decision => JSON.parse(decision).id === decisionId);
+    const index = entity.decisions.findIndex(decision => JSON.parse(decision).id === decisionId);
     if(index == -1){
       return;
     }
-    const removedDecision = decisions.splice(index, 1)[0]; 
+    const removedDecision = entity.decisions.splice(index, 1)[0]; 
+    await this.stateRepo.save(entity)
+
+    if(optionNumber == 1) {
+      await this.giveStateNewTile(stateId);
+    } 
     
-    this.giveStateNewTile(stateId);
     console.log(JSON.parse(removedDecision).question);
   }
 
