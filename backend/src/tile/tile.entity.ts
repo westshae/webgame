@@ -14,9 +14,6 @@ export class TileEntity {
     @Column('integer')
     q: number
 
-    @Column('integer', { array: true, nullable: true })
-    connectedTiles: number[];
-
     @Column()
     biome: string;
 

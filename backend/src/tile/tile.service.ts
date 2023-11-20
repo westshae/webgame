@@ -18,86 +18,40 @@ export class TileService {
 
     const noise = createNoise2D();
 
-    let madeTiles = [];
-
     let count = 0;
+    const tilesToInsert = [];
     for (let i = 0; i < size; i++) {
       for (let j = 0; j < size; j++) {
-        let tile = new Tile(
-          count,
-          i,
-          j,
-          i - (j - (j & 1)) / 2,
-          [],
-          this.determineBiome(i,j, noise),
-          randomInt(99),
-          randomInt(99),
-          null
-        )
+        tilesToInsert.push({
+          id: count,
+          x: i,
+          y: j,
+          q: i - (j - (j & 1)) / 2,
+          housingMax: randomInt(99),
+          biome: this.determineBiome(i, j, noise),
+          farmlandMax: randomInt(99),
+          stateId: null,
+        });
         count++;
-        madeTiles.push(tile);
       }
     }
-
-    for (let i = 0; i < size; i++) {
-      for (let j = 0; j < size; j++) {
-        const tile = madeTiles[i * size + j]; // Get the current tile
-
-        // Define the coordinates of adjacent tiles based on your grid structure
-        const adjacentCoordinates = [
-          [i, j - 1], // Left
-          [i, j + 1], // Right
-          [i - 1, j], // Above
-          [i + 1, j], // Below
-          j % 2 === 0 ? [i - 1, j - 1] : [i + 1, j - 1], // Top-left (if j is even) or Top-right (if j is odd)
-          j % 2 === 0 ? [i - 1, j + 1] : [i + 1, j + 1], // Bottom-left (if j is even) or Bottom-right (if j is odd)
-        ];
-
-        // Iterate through adjacentCoordinates and add IDs to the connectedTiles array
-        for (const [x, y] of adjacentCoordinates) {
-          if (x >= 0 && x < size && y >= 0 && y < size) {
-            const neighbor = madeTiles[x * size + y];
-            tile.connectedTiles.push(neighbor.id);
-          }
-        }
-      }
-    }
-
-    for (let tile of madeTiles) {
-      this.tileRepo.insert({
-        id: tile.id,
-        x: tile.x,
-        y: tile.y,
-        q: tile.x - (tile.y - (tile.y & 1)) / 2,
-        connectedTiles: tile.connectedTiles,
-        housingMax: tile.housingMax,
-        biome: tile.biome,
-        farmlandMax: tile.farmlandMax,
-        stateId: tile.stateId,
-      });
-    }
-  }
-
-  async loadWorld() {
-    let tiles = [];
-    let foundTiles: TileEntity[] = await this.tileRepo.find();
-
-    for (let tileInfo of foundTiles) {
-      const tile = new Tile(
-        tileInfo.id,
-        tileInfo.x,
-        tileInfo.y,
-        tileInfo.q,
-        tileInfo.connectedTiles,
-        tileInfo.biome,
-        tileInfo.housingMax,
-        tileInfo.farmlandMax,
-        tileInfo.stateId
-      )
-      tiles.push(tile);
-    }
-
-    return tiles;
+    await this.tileRepo.insert(tilesToInsert);
+    // let count = 0;
+    // for (let i = 0; i < size; i++) {
+    //   for (let j = 0; j < size; j++) {
+    //     this.tileRepo.insert({
+    //       id: count,
+    //       x: i,
+    //       y: j,
+    //       q: i - (j - (j & 1)) / 2,
+    //       housingMax: randomInt(99),
+    //       biome: this.determineBiome(i,j, noise),
+    //       farmlandMax: randomInt(99),
+    //       stateId: null,
+    //     });
+    //     count++;
+    //   }
+    // }
   }
 
   determineBiome(x: number, y: number, noise: NoiseFunction2D) {
@@ -134,7 +88,6 @@ export class TileService {
       tileEntity.x,
       tileEntity.y,
       tileEntity.q, 
-      tileEntity.connectedTiles,
       tileEntity.biome,
       tileEntity.housingMax,
       tileEntity.farmlandMax,
@@ -142,24 +95,6 @@ export class TileService {
     )
     return tile;
   }
-
-  // async getAllTilesWithinDistance(tileId: number, distance: number) {
-  //   const centralTile = await this.tileRepo.findOne({ id: tileId });
-  //   if (!centralTile) {
-  //     return [];
-  //   }
-  
-  //   const tiles = await this.tileRepo.find({
-  //     where: {
-  //       x: Between(centralTile.x - distance, centralTile.x + distance),
-  //       y: Between(centralTile.y - distance, centralTile.y + distance),
-  //       q: Between(centralTile.q - distance, centralTile.q + distance),
-  //     },
-  //   });
-  
-
-  //   return tiles;
-  // }
 
   async getAllTilesWithinDistance(tileId: number, distance: number) {
     const centralTile = await this.tileRepo.findOne({ id: tileId });
@@ -181,7 +116,6 @@ export class TileService {
 
     const filteredTiles = tiles.filter((tile) => {
       let tempDistance = distance - Math.abs(centralTile.y - tile.y)/2
-      tile.farmlandMax = tempDistance
       if(centralTile.y % 2 !== tile.y % 2){
         if(tile.y < centralTile.y){// top
           if(tile.x < centralTile.x - tempDistance){
@@ -210,8 +144,41 @@ export class TileService {
     return filteredTiles;
   }
 
+  async getAllAdjacentTiles(tileId:number){
+    const tile = await this.tileRepo.findOne({id:tileId});
+
+    const i = tile.x;
+    const j = tile.y;
+    const adjacentCoordinates = [
+      [i, j - 1], // Left
+      [i, j + 1], // Right
+      [i - 1, j], // Above
+      [i + 1, j], // Below
+      j % 2 === 0 ? [i - 1, j - 1] : [i + 1, j - 1], // Top-left (if j is even) or Top-right (if j is odd)
+      j % 2 === 0 ? [i - 1, j + 1] : [i + 1, j + 1], // Bottom-left (if j is even) or Bottom-right (if j is odd)
+    ];
+
+    const promises = [];
+
+    for(const [x,y] of adjacentCoordinates){
+      promises.push(this.tileRepo.findOne({
+        x:x,
+        y:y
+      }))
+    }
+    return await Promise.all(promises);
+  }
+
   async getTileFromId(id: number){
     return await this.tileRepo.findOne({id:id});
+  }
+
+  async getTileAtCoordinates(x:number, y:number){
+    return await this.tileRepo.findOne({x:x, y:y});
+  }
+
+  async getTilesFromStateId(stateId:number){
+    return await this.tileRepo.find({stateId:stateId});
   }
 
   async setStateId(tileId:number, stateId:number){

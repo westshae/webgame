@@ -41,20 +41,7 @@ export class StateService {
   async giveAllStatesNewTile(){
     let states = await this.getAllStates();
     for(let state of states){
-      let count = 0
-      while (count < 10){
-        let tile = await this.tileService.getTileFromId(state.tileIds[randomInt(state.tileIds.length)]);
-
-        let newTileId = tile.connectedTiles[randomInt(tile.connectedTiles.length)];
-        let newTile = await this.tileService.getTileFromId(newTileId);
-        if(newTile.stateId == null){
-          this.tileService.setStateId(newTileId, state.id);
-          state.tileIds.push(newTileId);
-          this.stateRepo.save(state);
-          break;
-        }
-        count++;
-      }
+      this.giveStateNewTile(state.id);
     }
   }
 
@@ -65,13 +52,11 @@ export class StateService {
 
     let count = 0
     while (count < 10){
-      let tile = await this.tileService.getTileFromId(entity.tileIds[randomInt(entity.tileIds.length)]);
-
-      let newTileId = tile.connectedTiles[randomInt(tile.connectedTiles.length)];
-      let newTile = await this.tileService.getTileFromId(newTileId);
+      let adjacentTiles = await this.tileService.getAllAdjacentTiles(entity.tileIds[randomInt(entity.tileIds.length)]);
+      let newTile = adjacentTiles[randomInt(adjacentTiles.length)];
       if(newTile.stateId == null){
-        this.tileService.setStateId(newTileId, entity.id);
-        entity.tileIds.push(newTileId);
+        this.tileService.setStateId(newTile.id, entity.id);
+        entity.tileIds.push(newTile.id);
         this.stateRepo.save(entity);
         break;
       }
@@ -156,7 +141,6 @@ export class StateService {
           tileInfo.x,
           tileInfo.y,
           tileInfo.q,
-          tileInfo.connectedTiles,
           tileInfo.biome,
           tileInfo.housingMax,
           tileInfo.farmlandMax,
