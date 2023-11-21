@@ -25,4 +25,10 @@ export class TileEntity {
 
     @Column('integer', {nullable:true})
     stateId: number;
+
+    @Column()
+    hasCapital: boolean;
+
+    @Column('integer', {nullable:true})
+    stateHexcode: number;
 } 

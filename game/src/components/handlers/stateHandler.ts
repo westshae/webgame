@@ -21,7 +21,6 @@ class StateHandler {
       for(let entity of response.data){
         let state = new State(entity.id, entity.capitalId, entity.controllerId, entity.tileIds, entity.hexcode, this.game);
         this.states[entity.id] = state;
-
       }
     })
     this.renderStates();

@@ -4,7 +4,6 @@ import { Between, In, Not, Repository } from "typeorm";
 import "dotenv/config";
 import { TileEntity } from "./tile.entity";
 import { randomInt } from "crypto";
-import { Tile } from "./tile";
 import { NoiseFunction2D, createNoise2D } from "simplex-noise";
 
 @Injectable()
@@ -31,6 +30,8 @@ export class TileService {
           biome: this.determineBiome(i, j, noise),
           farmlandMax: randomInt(99),
           stateId: null,
+          hasCapital: false,
+          hexcode: null
         });
         count++;
       }
@@ -67,17 +68,7 @@ export class TileService {
     tileEntity.stateId = stateId;
     this.tileRepo.save(tileEntity);
 
-    let tile = new Tile(
-      tileEntity.id, 
-      tileEntity.x,
-      tileEntity.y,
-      tileEntity.q, 
-      tileEntity.biome,
-      tileEntity.housingMax,
-      tileEntity.farmlandMax,
-      tileEntity.stateId
-    )
-    return tile;
+    return tileEntity;
   }
 
   async getAllTilesWithinDistance(tileId: number, distance: number) {
@@ -167,9 +158,11 @@ export class TileService {
     return await this.tileRepo.find({stateId:stateId});
   }
 
-  async setStateId(tileId:number, stateId:number){
+  async setStateOwner(tileId:number, stateId:number, hexcode:number, isCapital:boolean){
     let tile = await this.tileRepo.findOne({id:tileId});
     tile.stateId = stateId;
+    tile.stateHexcode = hexcode;
+    tile.hasCapital = isCapital;
     this.tileRepo.save(tile);
   }
 

@@ -5,7 +5,6 @@ import { urlencoded, json } from 'express';
 import { NestApplication } from '@nestjs/core';
 
 async function bootstrap() {
-  // const app = await NestFactory.create<NestApplication>(AppModule, { cors: true });
   const app = await NestFactory.create<NestApplication>(AppModule, {
     cors: {
       origin: '*',

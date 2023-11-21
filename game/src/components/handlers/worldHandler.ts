@@ -15,14 +15,13 @@ class WorldHandler {
   }
 
   async loadWorld(){
-    
     await axios.get("http://localhost:5000/state/getStateTiles", {params:{email: this.game.email, jwt: this.game.jwtToken}}).then((response) =>{
       this.tiles = [];
       for(let entity of response.data){
-        let tile = new Tile(entity.x, entity.y, entity.q, entity.biome, entity.housingMax, entity.farmlandMax, this.container, entity.stateId, entity.connectedTiles, entity.hexcode, false, this.game);
+        let tile = new Tile(entity.x, entity.y, entity.q, entity.biome, entity.housingMax, entity.farmlandMax, this.container, entity.stateId, entity.stateHexcode, entity.hasCapital, this.game);
         this.tiles[entity.id] = tile;
       }
-      this.render();  
+      this.render();
     })
     this.game.stateHandler.renderStates();
   }
@@ -36,6 +35,7 @@ class WorldHandler {
   }
 
   render() {
+    this.container = new Container();
     for(let tile of Object.values(this.tiles)){
       tile.render();
     }

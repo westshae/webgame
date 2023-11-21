@@ -5,8 +5,6 @@ import "dotenv/config";
 import { TileService } from "src/tile/tile.service";
 import { StateEntity } from "./state.entity";
 import { randomInt } from "crypto";
-import { take } from "rxjs";
-import { Tile } from "src/tile/tile";
 
 @Injectable()
 export class StateService {
@@ -27,14 +25,15 @@ export class StateService {
   async initStates(amount:number){
     for(let i = 1; i < amount; i++){
       const tile = await this.tileService.getRandomCapitalTile(i);
+      const hexcode = this.getRandomHexCode();
       this.stateRepo.insert({
         id: i,
         capitalId: tile.id,
         tileIds: [tile.id],
-        hexcode: this.getRandomHexCode(),
+        hexcode: hexcode,
         decisions: []
       });
-      this.tileService.setStateId(tile.id, i);
+      this.tileService.setStateOwner(tile.id, i, hexcode, true);
     }
   }
 
@@ -55,7 +54,7 @@ export class StateService {
       let adjacentTiles = await this.tileService.getAllAdjacentTiles(entity.tileIds[randomInt(entity.tileIds.length)]);
       let newTile = adjacentTiles[randomInt(adjacentTiles.length)];
       if(newTile != null && newTile.stateId == null){
-        this.tileService.setStateId(newTile.id, entity.id);
+        this.tileService.setStateOwner(newTile.id, entity.id, entity.hexcode, false);
         entity.tileIds.push(newTile.id);
         this.stateRepo.save(entity);
         break;
@@ -139,19 +138,7 @@ export class StateService {
     let tiles = [];
     for(let entity of stateEntities){
       let nearTiles = await this.tileService.getAllTilesWithinDistance(entity.capitalId, 6);
-      for (let tileInfo of nearTiles) {
-        const tile = new Tile(
-          tileInfo.id,
-          tileInfo.x,
-          tileInfo.y,
-          tileInfo.q,
-          tileInfo.biome,
-          tileInfo.housingMax,
-          tileInfo.farmlandMax,
-          tileInfo.stateId
-        )
-        tiles.push(tile);
-      }
+      tiles.push(...nearTiles);
     }
     return tiles;
   }

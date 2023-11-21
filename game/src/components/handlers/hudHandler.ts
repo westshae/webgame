@@ -54,6 +54,7 @@ class HudHandler {
 
   loadTileInfoMenu(tile:Tile){
     this.newBackground(0,0,500,600);
+    this.closeButton(500);
 
     this.newText(0,0,"Tile Information")
     this.newText(0,20,"X-Y-Q: " + tile.x + ", " + tile.y + ", " + tile.q)
@@ -61,11 +62,12 @@ class HudHandler {
     this.newText(0,60,"Max Housing: " + tile.housingMax)
     this.newText(0,80,"Max Farmland: " + tile.farmlandMax)
 
-    this.closeButton(500);
   }
 
   async loadCapitalInfoMenu(tile:Tile, stateId:number){
     this.newBackground(0,0,500,600);
+    this.closeButton(500);
+
     this.newText(0,0,"Tile Information")
     this.newText(0,20,"X-Y-Q: " + tile.x + ", " + tile.y + ", " + tile.q)
     this.newText(0,40,"Biome: " + tile.biome)
@@ -79,11 +81,11 @@ class HudHandler {
       this.loadDecisionInfoMenu(stateId);
     });
 
-    this.closeButton(500);
   }
 
   async loadDecisionInfoMenu(stateId:number){
     this.newBackground(0,0,500,600);
+    this.closeButton(500);
 
     let decision = await this.game.stateHandler.states[stateId].getFirstDecision();
 
@@ -100,7 +102,6 @@ class HudHandler {
       });
     }
 
-    this.closeButton(500);
   }
 
   newBackground(x:number, y:number, width:number, height:number){
