@@ -10,7 +10,9 @@ class WorldHandler {
 
   constructor(game:GameHandler) {
     this.game = game;
+
     this.container = new Container();
+    this.container.name = "world";
     this.tiles = [];
   }
 
@@ -21,9 +23,8 @@ class WorldHandler {
         let tile = new Tile(entity.x, entity.y, entity.q, entity.biome, entity.housingMax, entity.farmlandMax, this.container, entity.stateId, entity.stateHexcode, entity.hasCapital, this.game);
         this.tiles[entity.id] = tile;
       }
-      this.render();
     })
-    this.game.stateHandler.renderStates();
+    this.render();
   }
 
   setTile(id:number, tile:Tile){
@@ -36,9 +37,15 @@ class WorldHandler {
 
   render() {
     this.container = new Container();
+    this.container.name = "world";
+
+    let viewport = this.game.app.stage.getChildByName("viewport") as Container;
+
     for(let tile of Object.values(this.tiles)){
       tile.render();
     }
+
+    viewport.addChild(this.container);
   }
 }
 

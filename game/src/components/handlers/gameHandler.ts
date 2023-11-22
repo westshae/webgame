@@ -3,6 +3,7 @@ import { WorldHandler } from './worldHandler';
 import { DisplayHandler } from './displayHandler';
 import { HudHandler } from './hudHandler';
 import { StateHandler } from './stateHandler';
+import { Viewport } from 'pixi-viewport';
 
 class GameHandler {
   app: Application;
@@ -28,21 +29,20 @@ class GameHandler {
       return;
     }
     // window.history.replaceState({}, document.title, window.location.pathname);
-    await this.stateHandler.getOwnedStates();
-    await this.worldHandler.loadWorld();
     await this.tick();
     await this.beginLoop();
     await this.hudHandler.loadHud();
   }
 
   beginLoop(){
-    setInterval(() => {
-      this.tick();
+    setInterval(async() => {
+      await this.tick();
     }, 3000);  
   }
 
-  tick(){
-    this.stateHandler.getOwnedStates();
+  async tick(){
+    await this.stateHandler.getOwnedStates();
+    await this.worldHandler.loadWorld();
   }
 
   render(){

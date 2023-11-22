@@ -1,5 +1,6 @@
 import { Viewport } from 'pixi-viewport';
 import { game } from '../..';
+import { Container } from 'pixi.js';
 
 class DisplayHandler{
   init(){
@@ -15,11 +16,12 @@ class DisplayHandler{
       game.app.renderer.resize(window.innerWidth, window.innerHeight);
     });
   
-  
     const viewport = new Viewport({
       screenWidth: window.innerWidth,
       screenHeight: window.innerHeight,
     }) as any;
+
+    viewport.name = "viewport"
     
     game.app.stage.addChild(viewport);
     viewport.addChild(game.worldHandler.container);

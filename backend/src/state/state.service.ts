@@ -132,6 +132,26 @@ export class StateService {
     console.log(JSON.parse(removedDecision).question);
   }
 
+  async completeAllDecisionsIfInboxFull(){
+    let entity = await this.getAllStates();
+    let promises = []
+    for(let state of entity){
+      promises.push(this.completeDecisionIfInboxFull(state.id));
+    }
+    await Promise.all(promises);
+  }
+
+  async completeDecisionIfInboxFull(stateId:number){
+    let entity = await this.stateRepo.findOne({id:stateId});
+    if(entity.decisions.length < 10){
+      return;
+    } else {
+      let decision = await this.getFirstDecision(stateId);
+      let parsedDecision = JSON.parse(decision);
+      this.completeDecision(stateId, parsedDecision.id, randomInt(2));
+    }
+  }
+
   async getStateTiles(email:string){
     let stateEntities = await this.getControlledStates(email);
 
