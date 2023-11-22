@@ -24,7 +24,9 @@ class DisplayHandler{
     viewport.name = "viewport"
     
     game.app.stage.addChild(viewport);
-    viewport.addChild(game.worldHandler.container);
+    let worldContainer = new Container();
+    worldContainer.name = "world";
+    viewport.addChild(worldContainer);
   
     viewport
       .drag()

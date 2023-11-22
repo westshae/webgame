@@ -29,6 +29,7 @@ class GameHandler {
       return;
     }
     // window.history.replaceState({}, document.title, window.location.pathname);
+    await this.worldHandler.render();
     await this.tick();
     await this.beginLoop();
     await this.hudHandler.loadHud();
@@ -42,7 +43,7 @@ class GameHandler {
 
   async tick(){
     await this.stateHandler.getOwnedStates();
-    await this.worldHandler.loadWorld();
+    await this.worldHandler.render();
   }
 
   render(){

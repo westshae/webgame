@@ -55,11 +55,11 @@ class Tile {
     this.infobox = null;
 
     this.game = game;
-    this.stage = stage;
-    stage.addChild(this.sprite);
+    this.stage = (this.game.app.stage.getChildByName("viewport") as Container).getChildByName("world") as Container;
   }
 
   render(){
+
     this.sprite.width = this.spriteWidth;
     this.sprite.height = this.spriteHeight;
 
@@ -78,8 +78,21 @@ class Tile {
         yindex * this.spriteHeight + this.spriteHeight / 4 - heightOffset + (yindex * this.gapPixels);
     }
 
+    let spriteName = this.x + ":" + this.y + ":" + this.q + ":" + "tile";
+    let potentialTileSprite = this.stage.getChildByName(spriteName);
+    if(potentialTileSprite != null){
+      this.sprite.name = spriteName;
+      potentialTileSprite = this.sprite;
+    } else {
+      this.sprite.name = spriteName;
+
+      this.stage.addChild(this.sprite);
+
+    }
+
     if(this.isCapital){
       let house = Sprite.from(houseTexture);
+
       house.zIndex = 10
 
       house.width = this.spriteWidth;
@@ -92,20 +105,45 @@ class Tile {
           house.tint = this.hexcode;
         }
       }
-    
-      this.stage.addChild(house);  
+
+      let houseName = this.x + ":" + this.y + ":" + this.q + ":" + "house";
+      let potentialHouseSprite = this.stage.getChildByName(houseName);
+
+      if(potentialHouseSprite != null) {
+        house.name = houseName;
+        potentialHouseSprite = house;
+      } else {
+        house.name = houseName;
+        this.stage.addChild(house);  
+      }
     }
 
     if(this.stateId != null && this.hexcode != null){
-      let sprite = Sprite.from(selectorTexture);
-      sprite.tint = this.hexcode;
+      let selector = Sprite.from(selectorTexture);
 
-      sprite.width = this.spriteWidth;
-      sprite.height = this.spriteHeight;
-      sprite.x = this.sprite.x;
-      sprite.y = this.sprite.y;
+      selector.tint = this.hexcode;
+
+      selector.width = this.spriteWidth;
+      selector.height = this.spriteHeight;
+      selector.x = this.sprite.x;
+      selector.y = this.sprite.y;
+
+      let selectorName = this.x + ":" + this.y + ":" + this.q + ":" + "selector";
+      let potentialSelectorSprite = this.stage.getChildByName(selectorName);
+
+      if(potentialSelectorSprite != null) {
+
+        selector.name = selectorName;
+        potentialSelectorSprite = selector;
+      } else {
+        selector.name = selectorName;
+
+        this.stage.addChild(selector);  
+
+      }
+
   
-      this.stage.addChild(sprite);
+      // this.stage.addChild(selector);
     }
 
     this.stage.sortChildren();

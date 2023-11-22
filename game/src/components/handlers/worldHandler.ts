@@ -24,7 +24,6 @@ class WorldHandler {
         this.tiles[entity.id] = tile;
       }
     })
-    this.render();
   }
 
   setTile(id:number, tile:Tile){
@@ -35,17 +34,12 @@ class WorldHandler {
     return this.tiles[id];
   }
 
-  render() {
-    this.container = new Container();
-    this.container.name = "world";
-
-    let viewport = this.game.app.stage.getChildByName("viewport") as Container;
+  async render() {
+    await this.loadWorld();
 
     for(let tile of Object.values(this.tiles)){
       tile.render();
     }
-
-    viewport.addChild(this.container);
   }
 }
 
