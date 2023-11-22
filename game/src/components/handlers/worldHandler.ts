@@ -4,15 +4,11 @@ import axios from "axios";
 import { GameHandler } from "./gameHandler";
 
 class WorldHandler {
-  container: Container;
   game:GameHandler;
   tiles: { [id: number]: Tile };
 
   constructor(game:GameHandler) {
     this.game = game;
-
-    this.container = new Container();
-    this.container.name = "world";
     this.tiles = [];
   }
 
@@ -20,7 +16,7 @@ class WorldHandler {
     await axios.get("http://localhost:5000/state/getStateTiles", {params:{email: this.game.email, jwt: this.game.jwtToken}}).then((response) =>{
       this.tiles = [];
       for(let entity of response.data){
-        let tile = new Tile(entity.x, entity.y, entity.q, entity.biome, entity.housingMax, entity.farmlandMax, this.container, entity.stateId, entity.stateHexcode, entity.hasCapital, this.game);
+        let tile = new Tile(entity.x, entity.y, entity.q, entity.biome, entity.housingMax, entity.farmlandMax, entity.stateId, entity.stateHexcode, entity.hasCapital, this.game);
         this.tiles[entity.id] = tile;
       }
     })

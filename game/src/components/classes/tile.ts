@@ -28,7 +28,7 @@ class Tile {
 
 
 
-  constructor(x: number, y: number, q: number, biome:string, housingMax:number, farmlandMax:number, stage: Container, stateId: number|null, hexcode: number, isCapital:boolean, game: GameHandler) {
+  constructor(x: number, y: number, q: number, biome:string, housingMax:number, farmlandMax:number, stateId: number|null, hexcode: number, isCapital:boolean, game: GameHandler) {
     this.x = x;
     this.y = y;
     this.q = q;
@@ -132,21 +132,19 @@ class Tile {
       let potentialSelectorSprite = this.stage.getChildByName(selectorName);
 
       if(potentialSelectorSprite != null) {
-
         selector.name = selectorName;
         potentialSelectorSprite = selector;
       } else {
         selector.name = selectorName;
-
         this.stage.addChild(selector);  
-
       }
-
-  
-      // this.stage.addChild(selector);
     }
 
     this.stage.sortChildren();
+  }
+
+  newSprite(){
+
   }
 
   handleSprite(biome: string) {
