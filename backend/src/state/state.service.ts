@@ -5,6 +5,7 @@ import "dotenv/config";
 import { TileService } from "src/tile/tile.service";
 import { StateEntity } from "./state.entity";
 import { randomInt } from "crypto";
+import { Decision } from "./decisionHandler";
 
 @Injectable()
 export class StateService {
@@ -31,9 +32,51 @@ export class StateService {
         capitalId: tile.id,
         tileIds: [tile.id],
         hexcode: hexcode,
-        decisions: []
+        decisions: [],
+        farmlandCount: 0,
+        housingCount: 0,
+        populationCount: 0,
+        foodCount: 0,
+        farmlandWeight: 50,
+        housingWeight: 50,
+        populationWeight: 50,
+        foodWeight: 50,
+        landWeight: 50,
       });
       this.tileService.setStateOwner(tile.id, i, hexcode, true);
+    }
+  }
+
+  async tickAllStateLogic(){
+    let entity = await this.getAllStates();
+    let promises = []
+    for(let state of entity){
+      promises.push(this.tickStateLogic(state.id));
+    }
+    await Promise.all(promises);
+  }
+
+  async tickStateLogic(stateId:number){
+    await this.handleFarmlandOrHousing(stateId);
+    await this.handleLandOrFood(stateId);
+  }
+
+  async tickAllStateDecisions(){
+    let entity = await this.getAllStates();
+    let promises = []
+    for(let state of entity){
+      promises.push(this.tickStateDecisions(state.id));
+    }
+    await Promise.all(promises);
+  }
+
+  async tickStateDecisions(stateId:number){
+    let entity = await this.stateRepo.findOne({id:stateId});
+    if(entity.decisions.length < 10){
+      return;
+    } else {
+      let decision = await this.getFirstDecision(stateId);
+      await this.completeDecision(stateId, decision.key, randomInt(2));
     }
   }
 
@@ -97,12 +140,8 @@ export class StateService {
 
   async addNewDecision(stateId:number){
     let entity = await this.stateRepo.findOne({id:stateId});
-    let decision = {
-      id: randomInt(99999999),
-      question:"questionhere",
-      actionType: 0
-    }
-    entity.decisions.push(JSON.stringify(decision));
+    let key = Decision.getRandomKey();
+    entity.decisions.push(key);
     this.stateRepo.save(entity);
   }
 
@@ -113,43 +152,24 @@ export class StateService {
 
   async getFirstDecision(stateId:number){
     let entity = await this.stateRepo.findOne({id:stateId});
-    return entity.decisions[0]
+    let decisionKey = entity.decisions[0];
+    return {
+      question: await Decision.getQuestion(decisionKey),
+      key: decisionKey
+    }
   }
 
-  async completeDecision(stateId:number, decisionId:number, optionNumber:number){
+  async completeDecision(stateId:number, decisionNumber:number, optionNumber:number){
     let entity = await this.stateRepo.findOne({id:stateId});
-    const index = entity.decisions.findIndex(decision => JSON.parse(decision).id === decisionId);
-    if(index == -1){
+    const index = entity.decisions.indexOf(decisionNumber);
+    const removedKey = entity.decisions.splice(index, 1)[0];
+    if(removedKey == -1){
       return;
     }
-    const removedDecision = entity.decisions.splice(index, 1)[0]; 
-    await this.stateRepo.save(entity)
 
-    if(optionNumber == 1) {
-      await this.giveStateNewTile(stateId);
-    } 
-    
-    console.log(JSON.parse(removedDecision).question);
-  }
+    await Decision.executeKey(removedKey, entity, optionNumber);
 
-  async completeAllDecisionsIfInboxFull(){
-    let entity = await this.getAllStates();
-    let promises = []
-    for(let state of entity){
-      promises.push(this.completeDecisionIfInboxFull(state.id));
-    }
-    await Promise.all(promises);
-  }
-
-  async completeDecisionIfInboxFull(stateId:number){
-    let entity = await this.stateRepo.findOne({id:stateId});
-    if(entity.decisions.length < 10){
-      return;
-    } else {
-      let decision = await this.getFirstDecision(stateId);
-      let parsedDecision = JSON.parse(decision);
-      this.completeDecision(stateId, parsedDecision.id, randomInt(2));
-    }
+    await this.stateRepo.save(entity);
   }
 
   async getStateTiles(email:string){
@@ -171,5 +191,31 @@ export class StateService {
   async deleteAllStates(){
     let toDelete = await this.stateRepo.find();
     this.stateRepo.remove(toDelete);
+  }
+
+  async handleFarmlandOrHousing(stateId:number){
+    let entity = await this.stateRepo.findOne({id:stateId});
+
+    const random = randomInt(entity.farmlandWeight + entity.housingWeight);
+    if(random < entity.farmlandWeight){
+      entity.farmlandCount ++;
+    } else {
+      entity.housingCount ++;
+    }
+
+    await this.stateRepo.save(entity);
+  }
+
+  async handleLandOrFood(stateId:number){
+    let entity = await this.stateRepo.findOne({id:stateId});
+
+    const random = randomInt(entity.landWeight + entity.populationWeight);
+    if(random < entity.landWeight){
+      await this.giveStateNewTile(stateId);
+    } else {
+      entity.populationCount ++;
+    }
+
+    await this.stateRepo.save(entity);
   }
 }

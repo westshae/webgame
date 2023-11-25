@@ -9,13 +9,23 @@ class State {
   hexcode: number;
   game: GameHandler;
 
-  constructor(id: number, capitalId: number, controllerId: number | null, tileIds:number[], hexcode:number, game: GameHandler) {
+  farmlandCount: number;
+  housingCount: number;
+  populationCount: number;
+  foodCount: number;
+
+  constructor(id: number, capitalId: number, controllerId: number | null, tileIds:number[], hexcode:number, game: GameHandler, farmlandCount:number, housingCount:number, populationCount:number, foodCount:number) {
     this.id = id;
     this.capitalId = capitalId;
     this.controllerId = controllerId;
     this.tileIds = tileIds;
     this.hexcode = hexcode;
     this.game = game;
+
+    this.farmlandCount = farmlandCount;
+    this.housingCount = housingCount;
+    this.populationCount = populationCount;
+    this.foodCount = foodCount;
   }
 
   async getDecisionCount(){

@@ -56,28 +56,35 @@ class HudHandler {
     this.newBackground(0,0,500,600);
     this.closeButton(500);
 
-    this.newText(0,0,"Tile Information")
-    this.newText(0,20,"X-Y-Q: " + tile.x + ", " + tile.y + ", " + tile.q)
-    this.newText(0,40,"Biome: " + tile.biome)
-    this.newText(0,60,"Max Housing: " + tile.housingMax)
-    this.newText(0,80,"Max Farmland: " + tile.farmlandMax)
-
+    this.newText(0,0,"Tile Information", 500)
+    this.newText(0,20,"X-Y-Q: " + tile.x + ", " + tile.y + ", " + tile.q, 500)
+    this.newText(0,40,"Biome: " + tile.biome, 500)
+    this.newText(0,60,"Max Housing: " + tile.housingMax, 500)
+    this.newText(0,80,"Max Farmland: " + tile.farmlandMax, 500)
   }
 
   async loadCapitalInfoMenu(tile:Tile, stateId:number){
     this.newBackground(0,0,500,600);
     this.closeButton(500);
 
-    this.newText(0,0,"Tile Information")
-    this.newText(0,20,"X-Y-Q: " + tile.x + ", " + tile.y + ", " + tile.q)
-    this.newText(0,40,"Biome: " + tile.biome)
-    this.newText(0,60,"Max Housing: " + tile.housingMax)
-    this.newText(0,80,"Max Farmland: " + tile.farmlandMax)
+    this.newText(0,0,"Tile Information", 500)
+    this.newText(0,20,"X-Y-Q: " + tile.x + ", " + tile.y + ", " + tile.q, 500)
+    this.newText(0,40,"Biome: " + tile.biome, 500)
+    this.newText(0,60,"Max Housing: " + tile.housingMax, 500)
+    this.newText(0,80,"Max Farmland: " + tile.farmlandMax, 500)
 
-    this.newText(0, 120, "Decision Count: " + await this.game.stateHandler.states[stateId].getDecisionCount());
-    this.newText(0, 160, "Open a decision!");
+    let state = this.game.stateHandler.states[stateId];
 
-    this.newButton(220, 175, 0x900000, 20, async () => {
+    this.newText(0,120,"Farmland: " + state.farmlandCount, 500)
+    this.newText(0,140,"Housing: " + state.housingCount, 500)
+    this.newText(0,160,"Food: " + state.foodCount, 500)
+    this.newText(0,180,"Population: " + state.populationCount, 500)
+
+
+    this.newText(0, 220, "Decision Count: " + await state.getDecisionCount(), 500);
+    this.newText(0, 260, "Open a decision!", 500);
+
+    this.newButton(220, 275, 0x900000, 20, async () => {
       this.loadDecisionInfoMenu(stateId);
     });
 
@@ -89,7 +96,7 @@ class HudHandler {
 
     let decision = await this.game.stateHandler.states[stateId].getFirstDecision();
 
-    this.newText(0, 60, decision.question);
+    this.newText(0, 60, decision.question, 500);
 
     for(let i = 0; i < 2; i++){
       this.newButton((220+(i*50)), 560, 0x900000, 20, () => {
@@ -114,8 +121,8 @@ class HudHandler {
     this.leftContainer.addChild(background);
   }
 
-  newText(x:number, y:number, text:string){
-    let textObject: Text = new Text(text);
+  newText(x:number, y:number, text:string, maxWidth: number){
+    let textObject: Text = new Text(text, { wordWrap: true, wordWrapWidth: maxWidth });
     textObject.position.set(x, y);
     this.leftContainer.addChild(textObject);
   }

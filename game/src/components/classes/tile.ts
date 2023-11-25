@@ -99,12 +99,7 @@ class Tile {
       house.height = this.spriteHeight;
       house.x = this.sprite.x;
       house.y = this.sprite.y;
-
-      for(let state of Object.values(this.game.stateHandler.states)){
-        if(this.stateId == state.id){
-          house.tint = this.hexcode;
-        }
-      }
+      
 
       let houseName = this.x + ":" + this.y + ":" + this.q + ":" + "house";
       let potentialHouseSprite = this.stage.getChildByName(houseName);
@@ -113,6 +108,12 @@ class Tile {
         house.name = houseName;
         potentialHouseSprite = house;
       } else {
+        if(this.stateId != null){
+          let state = this.game.stateHandler.states[this.stateId];
+          if(state != undefined){
+            house.tint = this.hexcode;
+          }
+        }
         house.name = houseName;
         this.stage.addChild(house);  
       }
