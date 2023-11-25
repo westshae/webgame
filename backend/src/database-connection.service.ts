@@ -16,17 +16,7 @@ export class DatabaseConnectionService implements TypeOrmOptionsFactory {
       dropSchema: false,
       logging: true,
       entities: ["dist/**/*.entity.js"],
-      ssl: process.env.NODE_ENV === 'production',
-      extra: {
-        ssl: {
-          rejectUnauthorized: false, // Disable SSL verification for development
-        },
-        // Add SCRAM-SHA-256 authentication
-        auth: {
-          username: process.env.DATABASE_USER,
-          password: process.env.DATABASE_PASSWORD,
-        },
-      },
+      
     };
   }
 }
