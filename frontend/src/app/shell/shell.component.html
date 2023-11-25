@@ -1,0 +1,11 @@
+<div class="container">
+  <div class="noheader">
+    <input type="text" [(ngModel)]="email" placeholder="Enter your email" />
+    <button (click)="sendEmail()">Send Email</button>
+
+    <input type="text" [(ngModel)]="verificationCode" placeholder="Enter verification code" />
+    <button (click)="checkCode()">Check Code</button>
+
+    <button (click)="openNewTab()">Open New Tab</button>
+  </div>
+</div>
