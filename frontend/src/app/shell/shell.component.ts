@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import axios from 'axios';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-shell',
@@ -13,7 +14,7 @@ export class ShellComponent {
 
   sendEmail() {
     axios
-      .get('http://localhost:5000/auth/get', {
+      .get('http://' + environment.apiUrl + ':5000/auth/get', {
         params: { email: this.email },
       })
       .then((response) => {
@@ -28,7 +29,7 @@ export class ShellComponent {
 
   checkCode() {
     axios
-      .get('http://localhost:5000/auth/checkcode', {
+      .get('http://' + environment.apiUrl + ':5000/auth/checkcode', {
         params: { email: this.email, code: this.verificationCode },
       })
       .then((response) => {
@@ -46,8 +47,7 @@ export class ShellComponent {
     console.log(this.jwtToken);
     const jwtTokenString = this.jwtToken ? String(this.jwtToken) : ''; // Convert to string if it's an object
   
-    const url = `http://157.90.230.17:3000/?email=${this.email}&jwtToken=${jwtTokenString}`;
+    const url = `http://` + environment.apiUrl + `:3000/?email=${this.email}&jwtToken=${jwtTokenString}`;
     window.open(url, '_blank');
   }
-  
 }

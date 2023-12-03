@@ -2,6 +2,7 @@ import { Tile } from "../classes/tile";
 import { Container } from "pixi.js";
 import axios from "axios";
 import { GameHandler } from "./gameHandler";
+import "dotenv/config"
 
 class WorldHandler {
   game:GameHandler;
@@ -13,7 +14,7 @@ class WorldHandler {
   }
 
   async loadWorld(){
-    await axios.get("http://localhost:5000/state/getStateTiles", {params:{email: this.game.email, jwt: this.game.jwtToken}}).then((response) =>{
+    await axios.get("http://" + process.env.IP_ADDRESS + ":5000/state/getStateTiles", {params:{email: this.game.email, jwt: this.game.jwtToken}}).then((response) =>{
       this.tiles = [];
       for(let entity of response.data){
         let tile = new Tile(entity.x, entity.y, entity.q, entity.biome, entity.housingMax, entity.farmlandMax, entity.stateId, entity.stateHexcode, entity.hasCapital, this.game);

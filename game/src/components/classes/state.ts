@@ -1,5 +1,6 @@
 import axios from "axios";
 import { GameHandler } from "../handlers/gameHandler";
+import "dotenv/config"
 
 class State {
   id: number;
@@ -29,7 +30,7 @@ class State {
   }
 
   async getDecisionCount(){
-    const response = await axios.get(`http://localhost:5000/state/getDecisionCount`, {
+    const response = await axios.get(`http://` + process.env.IP_ADDRESS + `:5000/state/getDecisionCount`, {
       params: { stateId:this.id, email:this.game.email, jwt: this.game.jwtToken },
     });
 
@@ -37,7 +38,7 @@ class State {
   }
 
   async getFirstDecision(){
-    const response = await axios.get(`http://localhost:5000/state/getDecision`, {
+    const response = await axios.get(`http://` + process.env.IP_ADDRESS + `:5000/state/getDecision`, {
       params: { stateId:this.id, email:this.game.email, jwt: this.game.jwtToken },
     });
 
@@ -53,7 +54,7 @@ class State {
       jwt:jwt
     };
     
-    const response = await axios.post(`http://localhost:5000/state/completeDecision`, data);
+    const response = await axios.post(`http://` + process.env.IP_ADDRESS + `:5000/state/completeDecision`, data);
   }
 
 }
