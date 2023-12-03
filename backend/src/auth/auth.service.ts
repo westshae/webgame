@@ -99,7 +99,7 @@ export class AuthService {
       text: code,
     };
 
-    await new Promise((resolve, reject) => {
+    return await new Promise((resolve, reject) => {
       transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
           // logger.error(`Email sending failed: ${error.message}`);
