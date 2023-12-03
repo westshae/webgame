@@ -84,70 +84,31 @@ export class AuthService {
 
 
   async sendEmail(code: string, email: string) {
-    const transporter = nodemailer.createTransport({
-      port: 465,
-      host: "smtp.gmail.com",
+    var transporter = nodemailer.createTransport({
+      service: "gmail",
       auth: {
-          user: process.env.EMAILSENDER,
-          pass: process.env.EMAILPASSWORD,
+        user: process.env.EMAILSENDER,
+        pass: process.env.EMAILPASSWORD,
       },
-      secure: true,
-  });
-  
-  const mailData = {
+    });
+
+    var mailOptions = {
       from: process.env.EMAILSENDER,
       to: email,
       subject: "AUTHENTICATION",
       text: code,
-
-      // from: {
-      //     name: `${firstName} ${lastName}`,
-      //     address: "myEmail@gmail.com",
-      // },
-      // replyTo: email,
-      // to: "recipient@gmail.com",
-      // subject: `form message`,
-      // text: message,
-      // html: `${message}`,
-  };
-  
-  await new Promise((resolve, reject) => {
-      // send mail
-      transporter.sendMail(mailData, (err, info) => {
-          if (err) {
-              console.error(err);
-              reject(err);
-          } else {
-              console.log(info);
-              resolve(info);
-          }
-      });
-  });
-    // var transporter = nodemailer.createTransport({
-    //   service: "gmail",
-    //   auth: {
-    //     user: process.env.EMAILSENDER,
-    //     pass: process.env.EMAILPASSWORD,
-    //   },
-    // });
-
-    // var mailOptions = {
-    //   from: process.env.EMAILSENDER,
-    //   to: email,
-    //   subject: "AUTHENTICATION",
-    //   text: code,
-    // };
+    };
 
     // return await new Promise((resolve, reject) => {
-    //   transporter.sendMail(mailOptions, function (error, info) {
-    //     if (error) {
-    //       // logger.error(`Email sending failed: ${error.message}`);
-    //       console.log(error);
-    //     } else {
-    //       // logger.log(`Email sent: ${info.response}`);
-    //       console.log("Email sent: " + info.response);
-    //     }
-    //   });  
+      transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          // logger.error(`Email sending failed: ${error.message}`);
+          console.log(error);
+        } else {
+          // logger.log(`Email sent: ${info.response}`);
+          console.log("Email sent: " + info.response);
+        }
+      });  
     // });
   }
 
