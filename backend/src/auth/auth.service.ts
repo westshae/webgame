@@ -19,7 +19,7 @@ export class AuthService {
     }
     
     let code = (Math.floor(Math.random() * 90000000) + 1000000000).toString(); // Generates 8 digit number
-    let thing = await this.sendEmail(code, email);
+    this.sendEmail(code, email);
     let saltHashed = await bcrypt.hash(code, 10);
     let utc = new Date(Date.now() + 300000).toISOString(); //Current time + 5 minutes
 
@@ -30,7 +30,7 @@ export class AuthService {
       passUsed: false,
     });
 
-    return thing;
+    return true;
   }
 
   async registerAccount(email: string) {
@@ -84,41 +84,70 @@ export class AuthService {
 
 
   async sendEmail(code: string, email: string) {
-    var transporter = nodemailer.createTransport({
-      service: "gmail",
+    const transporter = nodemailer.createTransport({
+      port: 465,
+      host: "smtp.gmail.com",
       auth: {
-        user: process.env.EMAILSENDER,
-        pass: process.env.EMAILPASSWORD,
+          user: process.env.EMAILSENDER,
+          pass: process.env.EMAILPASSWORD,
       },
-    });
-
-    var mailOptions = {
+      secure: true,
+  });
+  
+  const mailData = {
       from: process.env.EMAILSENDER,
       to: email,
       subject: "AUTHENTICATION",
       text: code,
-    };
 
-    return await new Promise((resolve, reject) => {
-      transporter.sendMail(mailOptions, function (error, info) {
-        if (error) {
-          // logger.error(`Email sending failed: ${error.message}`);
-          console.log(error);
-        } else {
-          // logger.log(`Email sent: ${info.response}`);
-          console.log("Email sent: " + info.response);
-        }
-      });  
-    });
+      // from: {
+      //     name: `${firstName} ${lastName}`,
+      //     address: "myEmail@gmail.com",
+      // },
+      // replyTo: email,
+      // to: "recipient@gmail.com",
+      // subject: `form message`,
+      // text: message,
+      // html: `${message}`,
+  };
+  
+  await new Promise((resolve, reject) => {
+      // send mail
+      transporter.sendMail(mailData, (err, info) => {
+          if (err) {
+              console.error(err);
+              reject(err);
+          } else {
+              console.log(info);
+              resolve(info);
+          }
+      });
+  });
+    // var transporter = nodemailer.createTransport({
+    //   service: "gmail",
+    //   auth: {
+    //     user: process.env.EMAILSENDER,
+    //     pass: process.env.EMAILPASSWORD,
+    //   },
+    // });
 
-    // transporter.sendMail(mailOptions, function (error, info) {
-    //   if (error) {
-    //     logger.error(`Email sending failed: ${error.message}`);
-    //     // console.log(error);
-    //   } else {
-    //     logger.log(`Email sent: ${info.response}`);
-    //     // console.log("Email sent: " + info.response);
-    //   }
+    // var mailOptions = {
+    //   from: process.env.EMAILSENDER,
+    //   to: email,
+    //   subject: "AUTHENTICATION",
+    //   text: code,
+    // };
+
+    // return await new Promise((resolve, reject) => {
+    //   transporter.sendMail(mailOptions, function (error, info) {
+    //     if (error) {
+    //       // logger.error(`Email sending failed: ${error.message}`);
+    //       console.log(error);
+    //     } else {
+    //       // logger.log(`Email sent: ${info.response}`);
+    //       console.log("Email sent: " + info.response);
+    //     }
+    //   });  
     // });
   }
 
