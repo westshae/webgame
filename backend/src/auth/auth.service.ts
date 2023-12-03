@@ -19,7 +19,7 @@ export class AuthService {
     }
     
     let code = (Math.floor(Math.random() * 90000000) + 1000000000).toString(); // Generates 8 digit number
-    this.sendEmail(code, email);
+    await this.sendEmail(code, email);
     let saltHashed = await bcrypt.hash(code, 10);
     let utc = new Date(Date.now() + 300000).toISOString(); //Current time + 5 minutes
 
@@ -105,8 +105,10 @@ export class AuthService {
         if (error) {
           logger.error(`Email sending failed: ${error.message}`);
           // console.log(error);
+          reject(error);
         } else {
           logger.log(`Email sent: ${info.response}`);
+          resolve(info);
           // console.log("Email sent: " + info.response);
         }
       });  
