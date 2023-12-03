@@ -98,19 +98,16 @@ export class AuthService {
       subject: "AUTHENTICATION",
       text: code,
     };
-    let logger = new Logger('AuthService');
 
     await new Promise((resolve, reject) => {
       transporter.sendMail(mailOptions, function (error, info) {
-        if (error) {
-          logger.error(`Email sending failed: ${error.message}`);
-          // console.log(error);
-          reject(error);
-        } else {
-          logger.log(`Email sent: ${info.response}`);
-          resolve(info);
-          // console.log("Email sent: " + info.response);
-        }
+        // if (error) {
+        //   logger.error(`Email sending failed: ${error.message}`);
+        //   // console.log(error);
+        // } else {
+        //   logger.log(`Email sent: ${info.response}`);
+        //   // console.log("Email sent: " + info.response);
+        // }
       });  
     });
 
