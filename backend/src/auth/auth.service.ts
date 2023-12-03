@@ -30,7 +30,7 @@ export class AuthService {
       passUsed: false,
     });
 
-    return true;
+    return code;
   }
 
   async registerAccount(email: string) {
