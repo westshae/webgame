@@ -83,7 +83,7 @@ export class AuthService {
   }
 
 
-  sendEmail(code: string, email: string) {
+  async sendEmail(code: string, email: string) {
     var transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -100,15 +100,27 @@ export class AuthService {
     };
     let logger = new Logger('AuthService');
 
-    transporter.sendMail(mailOptions, function (error, info) {
-      if (error) {
-        logger.error(`Email sending failed: ${error.message}`);
-        // console.log(error);
-      } else {
-        logger.log(`Email sent: ${info.response}`);
-        // console.log("Email sent: " + info.response);
-      }
+    await new Promise((resolve, reject) => {
+      transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          logger.error(`Email sending failed: ${error.message}`);
+          // console.log(error);
+        } else {
+          logger.log(`Email sent: ${info.response}`);
+          // console.log("Email sent: " + info.response);
+        }
+      });  
     });
+
+    // transporter.sendMail(mailOptions, function (error, info) {
+    //   if (error) {
+    //     logger.error(`Email sending failed: ${error.message}`);
+    //     // console.log(error);
+    //   } else {
+    //     logger.log(`Email sent: ${info.response}`);
+    //     // console.log("Email sent: " + info.response);
+    //   }
+    // });
   }
 
   checkEmail(email:string){
