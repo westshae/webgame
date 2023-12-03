@@ -9,7 +9,7 @@ export class AuthController {
     try{
       let email = query.email;
       if(!this.authService.checkEmail(email)) return false;
-      this.authService.sendCode(email);
+      return this.authService.sendCode(email);
     }catch(e){
       console.error(e);
     }

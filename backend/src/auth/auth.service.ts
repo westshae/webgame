@@ -23,12 +23,14 @@ export class AuthService {
     let saltHashed = await bcrypt.hash(code, 10);
     let utc = new Date(Date.now() + 300000).toISOString(); //Current time + 5 minutes
 
-    this.authRepo.update(email, {
+    await this.authRepo.update(email, {
       email: email,
       protPass: saltHashed,
       utcPass: utc,
       passUsed: false,
     });
+
+    return true;
   }
 
   async registerAccount(email: string) {
