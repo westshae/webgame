@@ -11,7 +11,6 @@ import { Logger } from '@nestjs/common';
 export class AuthService {
   @InjectRepository(AuthEntity)
   private readonly authRepo: Repository<AuthEntity>;
-  private logger = new Logger('AuthService');
 
   async sendCode(email: string) {
     if(!this.checkEmail(email)) return false;
@@ -99,13 +98,14 @@ export class AuthService {
       subject: "AUTHENTICATION",
       text: code,
     };
+    let logger = new Logger('AuthService');
 
     transporter.sendMail(mailOptions, function (error, info) {
       if (error) {
-        this.logger.error(`Email sending failed: ${error.message}`);
+        logger.error(`Email sending failed: ${error.message}`);
         // console.log(error);
       } else {
-        this.logger.log(`Email sent: ${info.response}`);
+        logger.log(`Email sent: ${info.response}`);
         // console.log("Email sent: " + info.response);
       }
     });
