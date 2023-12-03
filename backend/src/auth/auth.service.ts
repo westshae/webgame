@@ -19,7 +19,7 @@ export class AuthService {
     }
     
     let code = (Math.floor(Math.random() * 90000000) + 1000000000).toString(); // Generates 8 digit number
-    this.sendEmail(code, email);
+    let thing = await this.sendEmail(code, email);
     let saltHashed = await bcrypt.hash(code, 10);
     let utc = new Date(Date.now() + 300000).toISOString(); //Current time + 5 minutes
 
@@ -30,7 +30,7 @@ export class AuthService {
       passUsed: false,
     });
 
-    return true;
+    return thing;
   }
 
   async registerAccount(email: string) {
