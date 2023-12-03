@@ -6,16 +6,17 @@ import * as nodemailer from "nodemailer";
 import * as bcrypt from "bcrypt";
 import * as jwt from "jsonwebtoken";
 import "dotenv/config";
-
+import { Logger } from '@nestjs/common';
 @Injectable()
 export class AuthService {
   @InjectRepository(AuthEntity)
   private readonly authRepo: Repository<AuthEntity>;
+  private logger = new Logger('AuthService');
 
   async sendCode(email: string) {
     if(!this.checkEmail(email)) return false;
     if ((await this.authRepo.findOne({ email: email })) === undefined) {
-      this.registerAccount(email);
+      await this.registerAccount(email);
     }
     
     let code = (Math.floor(Math.random() * 90000000) + 1000000000).toString(); // Generates 8 digit number
@@ -35,7 +36,7 @@ export class AuthService {
 
   async registerAccount(email: string) {
     if(!this.checkEmail(email)) return false;
-    this.authRepo.insert({
+    await this.authRepo.insert({
       email: email,
     });
   }
@@ -101,9 +102,11 @@ export class AuthService {
 
     transporter.sendMail(mailOptions, function (error, info) {
       if (error) {
-        console.log(error);
+        this.logger.error(`Email sending failed: ${error.message}`);
+        // console.log(error);
       } else {
-        console.log("Email sent: " + info.response);
+        this.logger.log(`Email sent: ${info.response}`);
+        // console.log("Email sent: " + info.response);
       }
     });
   }

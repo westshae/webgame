@@ -6,6 +6,7 @@ import { NestApplication } from '@nestjs/core';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestApplication>(AppModule, {
+    logger: ['log', 'error', 'warn'],
     cors: {
       origin: '*',
     },
