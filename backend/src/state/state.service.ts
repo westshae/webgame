@@ -196,10 +196,6 @@ export class StateService {
   async handleFarmlandOrHousing(stateId:number){
     let entity = await this.stateRepo.findOne({id:stateId});
 
-    if(entity.farmlandWeight + entity.housingWeight <= 0){
-      return;
-    }
-
     const random = randomInt(entity.farmlandWeight + entity.housingWeight);
     if(random < entity.farmlandWeight){
       entity.farmlandCount ++;
@@ -212,10 +208,6 @@ export class StateService {
 
   async handleLandOrFood(stateId:number){
     let entity = await this.stateRepo.findOne({id:stateId});
-
-    if(entity.landWeight + entity.populationWeight <= 0){
-      return;
-    }
 
     const random = randomInt(entity.landWeight + entity.populationWeight);
     if(random < entity.landWeight){
