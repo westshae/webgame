@@ -25,8 +25,12 @@ export class GameloopService implements OnModuleInit {
   }
 
   tick() {
-    this.stateService.addDecisionToAllStates();
-    this.stateService.tickAllStateDecisions();
-    this.stateService.tickAllStateLogic();
+    try{
+      this.stateService.addDecisionToAllStates();
+      this.stateService.tickAllStateDecisions();
+      this.stateService.tickAllStateLogic();  
+    } catch (e){
+      console.error(e);
+    }
   }
 }
