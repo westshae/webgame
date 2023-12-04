@@ -20,11 +20,7 @@ export class GameloopService implements OnModuleInit {
 
   initLoop(seconds:number){
     setInterval(() => {
-      try{
-        this.tick();
-      } catch(e){
-        console.error(e);
-      }
+      this.tick();
     }, seconds*1000);
   }
 
