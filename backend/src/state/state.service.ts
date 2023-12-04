@@ -57,8 +57,8 @@ export class StateService {
   }
 
   async tickStateLogic(stateId:number){
-    await this.handleFarmlandOrHousing(stateId);
-    await this.handleLandOrFood(stateId);
+    await this.handleBuilding(stateId);
+    await this.handleResources(stateId);
   }
 
   async tickAllStateDecisions(){
@@ -193,28 +193,37 @@ export class StateService {
     this.stateRepo.remove(toDelete);
   }
 
-  async handleFarmlandOrHousing(stateId:number){
+  async handleBuilding(stateId:number){
     let entity = await this.stateRepo.findOne({id:stateId});
 
-    const random = randomInt(entity.farmlandWeight + entity.housingWeight);
-    if(random < entity.farmlandWeight){
-      entity.farmlandCount ++;
-    } else {
-      entity.housingCount ++;
-    }
+    const totalResources = 5;
+
+    const totalWeight = entity.farmlandWeight + entity.housingWeight + entity.landWeight;
+
+    const farmlandPercentage = entity.farmlandWeight / totalWeight;
+    const housingPercentage = entity.housingWeight / totalWeight;
+    const landPercentage = entity.landWeight / totalWeight;
+
+    const allocatedFarmland = Math.floor(farmlandPercentage * totalResources);
+    const allocatedHousing = Math.floor(housingPercentage * totalResources);
+    const allocatedLand = Math.floor(landPercentage * totalResources);
+
+    entity.farmlandCount += allocatedFarmland;
+    entity.housingCount += allocatedHousing;
 
     await this.stateRepo.save(entity);
+
+    for(let i = 0; i < allocatedLand; i++){
+      await this.giveStateNewTile(stateId);
+    }
+
   }
 
-  async handleLandOrFood(stateId:number){
+  async handleResources(stateId:number){
     let entity = await this.stateRepo.findOne({id:stateId});
 
-    const random = randomInt(entity.landWeight + entity.populationWeight);
-    if(random < entity.landWeight){
-      await this.giveStateNewTile(stateId);
-    } else {
-      entity.populationCount ++;
-    }
+    entity.foodCount += Math.round(entity.farmlandCount/10);
+    entity.populationCount += Math.round(entity.housingCount/10);
 
     await this.stateRepo.save(entity);
   }
