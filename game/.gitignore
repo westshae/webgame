@@ -1,5 +1,4 @@
 shell.nix
 
 **/node_modules/
-.env
 dist/
