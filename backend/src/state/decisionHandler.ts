@@ -8,7 +8,7 @@ export class Decision {
 
   static getRandomKey() {
     const keys = Object.keys(this.options);
-    const randomKey = keys[Math.round(Math.random() * keys.length)];
+    const randomKey = keys[Math.floor(Math.random() * keys.length)];
     return parseInt(randomKey);
   }
 
