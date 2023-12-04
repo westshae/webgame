@@ -1,6 +1,6 @@
 {
     "name": "PROJECTK",
-    "version": "0.4",
+    "version": "0.1.0",
     "description": "PROJECTK",
     "scripts": {
         "dev": "webpack-dev-server -d --host 0.0.0.0"
