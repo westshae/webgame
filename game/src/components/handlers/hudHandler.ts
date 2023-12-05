@@ -1,96 +1,185 @@
-import { Container, Graphics, Text } from 'pixi.js';
+import { Container, Graphics, Sprite, Text } from 'pixi.js';
 import { GameHandler } from './gameHandler';
 import { Tile } from '../classes/tile';
 import { State } from '../classes/state';
+import { mayorTexture } from './texturesHandler';
+import TweenMax from 'gsap';
 
 class HudHandler {
   stage: Container;
-  leftContainer: Container;
-  rightContainer: Container;
+  decisionContainer: Container;
+  stateContainer: Container;
+  mayorContainer: Container;
   game: GameHandler;
+
+  stateName: Text;
+  stateFood: Text;
+  stateMetal: Text;
+  stateHousing: Text;
+  stateFarmland: Text;
+  statePopulation: Text;
 
 
   constructor(game:GameHandler) {
     this.stage = game.app.stage;
     this.game = game;
-    this.leftContainer = new Container();
-    this.stage.addChild(this.leftContainer);
+    this.decisionContainer = new Container();
+    this.stage.addChild(this.decisionContainer);
 
-    this.rightContainer = new Container();
-    this.stage.addChild(this.rightContainer);
+    this.stateContainer = new Container();
+    this.stage.addChild(this.stateContainer);
+
+    this.mayorContainer = new Container();
+    this.stage.addChild(this.mayorContainer);
+
+    this.stateName = new Text("Placeholder Text");
+    this.stateFood = new Text("Placeholder Text");
+    this.stateMetal = new Text("Placeholder Text");
+    this.stateHousing = new Text("Placeholder Text");
+    this.stateFarmland = new Text("Placeholder Text");
+    this.statePopulation = new Text("Placeholder Text");
   }
 
   loadHud(){
-    this.loadRightSidebar();
-    this.leftContainer.zIndex = 10;
-    this.rightContainer.zIndex = 10;
+    this.loadStateInfoBox();
+    this.loadMayorInfoBox();
+
+    this.decisionContainer.zIndex = 10;
+    this.stateContainer.zIndex = 10;
+    this.mayorContainer.zIndex = 10;
     this.stage.sortChildren();
   }
 
-  loadRightSidebar(){
-    let screenWidth = this.game.app.view.width;
+  updateStateInfoBox(){
+    let state = Object.values(this.game.stateHandler.states)[0];
 
-    this.rightContainer.x = screenWidth-200;
-
-
-    let title: Text = new Text("States Owned");
-
-    title.position.set(0, 0);
-
-    let y = 50;
-
-    for(let state of Object.values(this.game.stateHandler.states)){
-      let button = new Graphics();
-      button.beginFill(state.hexcode);
-      button.drawCircle(-20, y, 20);
-      button.interactive = true;
-      this.rightContainer.addChild(button);
-
-      y += 50;
-    }
-
-    this.rightContainer.addChild(title);
+    this.stateName.text = "WIP Name"
+    this.stateHousing.text = "" + state.housingCount + " Housing"
+    this.stateFarmland.text = "" + state.farmlandCount + " Farmland"
+    this.statePopulation.text = "" + state.populationCount + " Population"
+    this.stateFood.text = "" + state.foodCount + " Food"
+    this.stateMetal.text = "WIP Metal"
   }
 
-  loadTileInfoMenu(tile:Tile){
-    this.newBackground(0,0,500,600);
-    this.closeButton(500);
+  sendMayorNotification(text: string){
+    let maxWidth = 400;
+    
+    let notificationContainer = new Container();
 
-    this.newText(0,0,"Tile Information", 500)
-    this.newText(0,20,"X-Y-Q: " + tile.x + ", " + tile.y + ", " + tile.q, 500)
-    this.newText(0,40,"Biome: " + tile.biome, 500)
-    this.newText(0,60,"Max Housing: " + tile.housingMax, 500)
-    this.newText(0,80,"Max Farmland: " + tile.farmlandMax, 500)
+    let textObject: Text = new Text(text, { wordWrap: true, wordWrapWidth: maxWidth });
+    textObject.position.set(25,225);
+
+    let background = new Graphics();
+
+    background.beginFill(0xFFFDD0, 0.8); // Cream color
+
+    background.drawRect(20, 225, 420, 60);
+    background.endFill();
+
+    notificationContainer.addChild(background);
+    notificationContainer.addChild(textObject);
+
+    this.mayorContainer.addChild(notificationContainer);
+
+    TweenMax.to(notificationContainer.position, 10, { y: this.game.app.view.height-100, ease: "linear", onComplete: this.removeText.bind(this, notificationContainer) });
   }
 
-  async loadCapitalInfoMenu(tile:Tile, stateId:number){
-    this.newBackground(0,0,500,600);
-    this.closeButton(500);
+  removeText(object:any) {
+    TweenMax.to(object, 1, { alpha: 0 , onComplete: () =>{
+      this.mayorContainer.removeChild(object);
+      object.destroy();
+    }});
 
-    this.newText(0,0,"Tile Information", 500)
-    this.newText(0,20,"X-Y-Q: " + tile.x + ", " + tile.y + ", " + tile.q, 500)
-    this.newText(0,40,"Biome: " + tile.biome, 500)
-    this.newText(0,60,"Max Housing: " + tile.housingMax, 500)
-    this.newText(0,80,"Max Farmland: " + tile.farmlandMax, 500)
+  }
 
-    let state = this.game.stateHandler.states[stateId];
+  loadMayorInfoBox(){
+    let mayor = Sprite.from(mayorTexture);
+    mayor.width = 200;
+    mayor.height = 200;
 
-    this.newText(0,120,"Farmland: " + state.farmlandCount, 500)
-    this.newText(0,140,"Housing: " + state.housingCount, 500)
-    this.newText(0,160,"Food: " + state.foodCount, 500)
-    this.newText(0,180,"Population: " + state.populationCount, 500)
+    mayor.interactive = true;
 
-
-    this.newText(0, 220, "Decision Count: " + await state.getDecisionCount(), 500);
-    this.newText(0, 260, "Open a decision!", 500);
-
-    this.newButton(220, 275, 0x900000, 20, async () => {
-      this.loadDecisionInfoMenu(stateId);
+    mayor.on("pointerdown", ()=>{
+      this.loadDecisionInfoMenu(Object.values(this.game.stateHandler.states)[0].id);
     });
 
+    this.mayorContainer.addChild(mayor);
   }
 
+  loadStateInfoBox(){
+    let screenWidth = this.game.app.view.width;
+
+    this.stateContainer.x = screenWidth-250;
+
+    let state = Object.values(this.game.stateHandler.states)[0];
+
+    this.stateName.text = "WIP Name"
+    this.stateHousing.text = "" + state.housingCount + " Housing"
+    this.stateFarmland.text = "" + state.farmlandCount + " Farmland"
+    this.statePopulation.text = "" + state.populationCount + " Population"
+    this.stateFood.text = "" + state.foodCount + " Food"
+    this.stateMetal.text = "WIP Metal"
+
+    let list = [this.stateName, this.stateHousing, this.stateFarmland, this.statePopulation, this.stateFood, this.stateMetal];
+    let y = 20;
+
+    for(let i of list){
+      i.position.set(0,y);
+
+      let background = new Graphics();
+
+      background.beginFill(0xFFFDD0); // Cream color
+      background.drawRect(0, y, 200, 30);
+      background.endFill();
+  
+      this.stateContainer.addChild(background);
+
+      this.stateContainer.addChild(i);
+  
+      y +=40;
+    }
+  }
+
+  // loadTileInfoMenu(tile:Tile){
+  //   this.newBackground(0,0,500,600);
+  //   this.closeButton(500);
+
+  //   this.newText(0,0,"Tile Information", 500)
+  //   this.newText(0,20,"X-Y-Q: " + tile.x + ", " + tile.y + ", " + tile.q, 500)
+  //   this.newText(0,40,"Biome: " + tile.biome, 500)
+  //   this.newText(0,60,"Max Housing: " + tile.housingMax, 500)
+  //   this.newText(0,80,"Max Farmland: " + tile.farmlandMax, 500)
+  // }
+
+  // async loadCapitalInfoMenu(tile:Tile, stateId:number){
+  //   this.newBackground(0,0,500,600);
+  //   this.closeButton(500);
+
+  //   this.newText(0,0,"Tile Information", 500)
+  //   this.newText(0,20,"X-Y-Q: " + tile.x + ", " + tile.y + ", " + tile.q, 500)
+  //   this.newText(0,40,"Biome: " + tile.biome, 500)
+  //   this.newText(0,60,"Max Housing: " + tile.housingMax, 500)
+  //   this.newText(0,80,"Max Farmland: " + tile.farmlandMax, 500)
+
+  //   let state = this.game.stateHandler.states[stateId];
+
+  //   this.newText(0,120,"Farmland: " + state.farmlandCount, 500)
+  //   this.newText(0,140,"Housing: " + state.housingCount, 500)
+  //   this.newText(0,160,"Food: " + state.foodCount, 500)
+  //   this.newText(0,180,"Population: " + state.populationCount, 500)
+
+
+  //   this.newText(0, 220, "Decision Count: " + await state.getDecisionCount(), 500);
+  //   this.newText(0, 260, "Open a decision!", 500);
+
+  //   this.newButton(220, 275, 0x900000, 20, async () => {
+  //     this.loadDecisionInfoMenu(stateId);
+  //   });
+
+  // }
+
   async loadDecisionInfoMenu(stateId:number){
+    this.decisionContainer.position.set(this.game.app.view.width-500, this.game.app.view.height-600)
     this.newBackground(0,0,500,600);
     this.closeButton(500);
 
@@ -118,13 +207,13 @@ class HudHandler {
     background.drawRect(x, y, width, height);
     background.endFill();
 
-    this.leftContainer.addChild(background);
+    this.decisionContainer.addChild(background);
   }
 
   newText(x:number, y:number, text:string, maxWidth: number){
     let textObject: Text = new Text(text, { wordWrap: true, wordWrapWidth: maxWidth });
     textObject.position.set(x, y);
-    this.leftContainer.addChild(textObject);
+    this.decisionContainer.addChild(textObject);
   }
 
   newButton(x:number, y:number, hexcode:number, size:number, onClick:Function){
@@ -137,7 +226,7 @@ class HudHandler {
     button.interactive = true;
 
     button.on("pointerdown", onClick);
-    this.leftContainer.addChild(button);
+    this.decisionContainer.addChild(button);
   }
 
   closeButton(x:number){
@@ -150,13 +239,13 @@ class HudHandler {
     closeButton.interactive = true;
 
     closeButton.on("pointerdown", () => this.handleClose());
-    this.leftContainer.addChild(closeButton);
+    this.decisionContainer.addChild(closeButton);
   }
 
   handleClose(){
-    this.stage.removeChild(this.leftContainer);
-    this.leftContainer = new Container();
-    this.stage.addChild(this.leftContainer);
+    this.stage.removeChild(this.decisionContainer);
+    this.decisionContainer = new Container();
+    this.stage.addChild(this.decisionContainer);
   }
 }
 

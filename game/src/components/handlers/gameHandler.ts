@@ -44,6 +44,8 @@ class GameHandler {
   async tick(){
     await this.stateHandler.getOwnedStates();
     await this.worldHandler.render();
+    await this.hudHandler.updateStateInfoBox();
+    await this.hudHandler.sendMayorNotification("Fun fact, click on my face to get a new decision!");
   }
 
   render(){

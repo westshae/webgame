@@ -173,14 +173,14 @@ class Tile {
       return;
     }
 
-    if(this.stateId != null && this.hexcode != null){
-      this.game.hudHandler.loadTileInfoMenu(this);
-    }
-    if(this.isCapital && this.stateId != null){
-      this.game.hudHandler.loadCapitalInfoMenu(this, this.stateId);
-    } else {
-      this.game.hudHandler.loadTileInfoMenu(this);
-    }
+    // if(this.stateId != null && this.hexcode != null){
+    //   this.game.hudHandler.loadTileInfoMenu(this);
+    // }
+    // if(this.isCapital && this.stateId != null){
+    //   this.game.hudHandler.loadCapitalInfoMenu(this, this.stateId);
+    // } else {
+    //   this.game.hudHandler.loadTileInfoMenu(this);
+    // }
   }
 }
 

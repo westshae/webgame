@@ -1,6 +1,6 @@
 {
     "name": "PROJECTK",
-    "version": "0.1.0",
+    "version": "0.1.3",
     "description": "PROJECTK",
     "scripts": {
         "dev": "webpack-dev-server -d --host 0.0.0.0"
@@ -21,6 +21,7 @@
     "dependencies": {
         "axios": "^1.5.1",
         "dotenv": "^16.3.1",
+        "gsap": "^3.12.3",
         "pixi-viewport": "^4.33.0",
         "pixi.js": "5.2.1",
         "simplex-noise": "^3.0.0"

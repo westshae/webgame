@@ -9,6 +9,7 @@ const houseTexture = Texture.from('../assets/buildings/house.png');
 
 const selectorTexture = Texture.from('../assets/util/selector.png');
 
+const mayorTexture = Texture.from('../assets/npc/portait.png');
 
 export {
   grassTexture,
@@ -18,4 +19,5 @@ export {
   missingTexture,
   houseTexture,
   selectorTexture,
+  mayorTexture,
 };
