@@ -20,7 +20,6 @@ export class StateEntity {
     @Column('integer', { array: true })
     decisions: number[];
 
-
     @Column('integer')
     housingCount: number;
 
@@ -32,19 +31,4 @@ export class StateEntity {
 
     @Column('integer')
     foodCount: number;
-
-    @Column('integer')
-    housingWeight: number;
-
-    @Column('integer')
-    farmlandWeight: number;
-
-    @Column('integer')
-    populationWeight: number;
-
-    @Column('integer')
-    foodWeight: number;
-
-    @Column('integer')
-    landWeight: number;
 } 

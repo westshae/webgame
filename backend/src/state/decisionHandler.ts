@@ -36,13 +36,11 @@ export class Decision {
     if(wantQuestion){
       return question;
     } else {
-      if(optionNumber == 0){//Increase housing
-        stateEntity.housingWeight += 10;
-        stateEntity.farmlandWeight -= 10;
-      } else if (optionNumber == 1){//Increase farmland
-        stateEntity.housingWeight -= 10;
-        stateEntity.farmlandWeight += 10;
-      }
+      // if(optionNumber == 0){//Increase housing
+      //   stateEntity.farmlandWeight -= 10;
+      // } else if (optionNumber == 1){//Increase farmland
+      //   stateEntity.farmlandWeight += 10;
+      // }
       return stateEntity;
     }
   }
@@ -53,13 +51,13 @@ export class Decision {
     if(wantQuestion){
       return question;
     } else {
-      if(optionNumber == 0){//Increase food
-        stateEntity.foodWeight += 10;
-        stateEntity.landWeight -= 10;
-      } else if (optionNumber == 1){//Increase land
-        stateEntity.foodWeight -= 10;
-        stateEntity.landWeight += 10;
-      }
+      // if(optionNumber == 0){//Increase food
+      //   stateEntity.foodWeight += 10;
+      //   stateEntity.landWeight -= 10;
+      // } else if (optionNumber == 1){//Increase land
+      //   stateEntity.foodWeight -= 10;
+      //   stateEntity.landWeight += 10;
+      // }
     }
   }
 

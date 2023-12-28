@@ -17,7 +17,8 @@
     "pgdwprod": "sudo /usr/local/bin/docker-compose down",
     "pgup": "systemctl start docker && sudo docker-compose up --force-recreate -d",
     "pgdw": "sudo docker-compose down",
-    "query": "psql postgresql://postgres:postgres@localhost:5432/postgres"
+    "query": "psql postgresql://postgres:postgres@localhost:5432/postgres",
+    "createmigration": "npx typeorm migration:create --dir src/migrations --name"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",

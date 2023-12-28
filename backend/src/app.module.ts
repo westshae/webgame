@@ -12,6 +12,7 @@ import { StateModule } from "./state/state.module";
     TypeOrmModule.forRootAsync({
       useClass: DatabaseConnectionService,
     }),
+    TypeOrmModule.forFeature([]), // Add this line to specify the migrations configuration for entities
     AuthModule,
     TileModule,
     GameloopModule,

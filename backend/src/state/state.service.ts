@@ -37,11 +37,6 @@ export class StateService {
         housingCount: 0,
         populationCount: 0,
         foodCount: 0,
-        farmlandWeight: 50,
-        housingWeight: 50,
-        populationWeight: 50,
-        foodWeight: 50,
-        landWeight: 50,
       });
       this.tileService.setStateOwner(tile.id, i, hexcode, true);
     }
@@ -57,8 +52,6 @@ export class StateService {
   }
 
   async tickStateLogic(stateId:number){
-    await this.handleBuilding(stateId);
-    await this.handleResources(stateId);
   }
 
   async tickAllStateDecisions(){
@@ -191,40 +184,5 @@ export class StateService {
   async deleteAllStates(){
     let toDelete = await this.stateRepo.find();
     this.stateRepo.remove(toDelete);
-  }
-
-  async handleBuilding(stateId:number){
-    let entity = await this.stateRepo.findOne({id:stateId});
-
-    const totalResources = 5;
-
-    const totalWeight = entity.farmlandWeight + entity.housingWeight + entity.landWeight;
-
-    const farmlandPercentage = entity.farmlandWeight / totalWeight;
-    const housingPercentage = entity.housingWeight / totalWeight;
-    const landPercentage = entity.landWeight / totalWeight;
-
-    const allocatedFarmland = Math.floor(farmlandPercentage * totalResources);
-    const allocatedHousing = Math.floor(housingPercentage * totalResources);
-    const allocatedLand = Math.floor(landPercentage * totalResources);
-
-    entity.farmlandCount += allocatedFarmland;
-    entity.housingCount += allocatedHousing;
-
-    await this.stateRepo.save(entity);
-
-    for(let i = 0; i < allocatedLand; i++){
-      await this.giveStateNewTile(stateId);
-    }
-
-  }
-
-  async handleResources(stateId:number){
-    let entity = await this.stateRepo.findOne({id:stateId});
-
-    entity.foodCount += Math.round(entity.farmlandCount/10);
-    entity.populationCount += Math.round(entity.housingCount/10);
-
-    await this.stateRepo.save(entity);
   }
 }
