@@ -17,12 +17,6 @@ export class TileEntity {
     @Column()
     biome: string;
 
-    @Column('integer')
-    farmlandMax: number;
-    
-    @Column('integer')
-    housingMax: number;
-
     @Column('integer', {nullable:true})
     stateId: number;
 

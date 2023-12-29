@@ -144,43 +144,9 @@ class HudHandler {
     }
   }
 
-  // loadTileInfoMenu(tile:Tile){
-  //   this.newBackground(0,0,500,600);
-  //   this.closeButton(500);
-
-  //   this.newText(0,0,"Tile Information", 500)
-  //   this.newText(0,20,"X-Y-Q: " + tile.x + ", " + tile.y + ", " + tile.q, 500)
-  //   this.newText(0,40,"Biome: " + tile.biome, 500)
-  //   this.newText(0,60,"Max Housing: " + tile.housingMax, 500)
-  //   this.newText(0,80,"Max Farmland: " + tile.farmlandMax, 500)
-  // }
-
-  // async loadCapitalInfoMenu(tile:Tile, stateId:number){
-  //   this.newBackground(0,0,500,600);
-  //   this.closeButton(500);
-
-  //   this.newText(0,0,"Tile Information", 500)
-  //   this.newText(0,20,"X-Y-Q: " + tile.x + ", " + tile.y + ", " + tile.q, 500)
-  //   this.newText(0,40,"Biome: " + tile.biome, 500)
-  //   this.newText(0,60,"Max Housing: " + tile.housingMax, 500)
-  //   this.newText(0,80,"Max Farmland: " + tile.farmlandMax, 500)
-
-  //   let state = this.game.stateHandler.states[stateId];
-
-  //   this.newText(0,120,"Farmland: " + state.farmlandCount, 500)
-  //   this.newText(0,140,"Housing: " + state.housingCount, 500)
-  //   this.newText(0,160,"Food: " + state.foodCount, 500)
-  //   this.newText(0,180,"Population: " + state.populationCount, 500)
-
-
-  //   this.newText(0, 220, "Decision Count: " + await state.getDecisionCount(), 500);
-  //   this.newText(0, 260, "Open a decision!", 500);
-
-  //   this.newButton(220, 275, 0x900000, 20, async () => {
-  //     this.loadDecisionInfoMenu(stateId);
-  //   });
-
-  // }
+  loadTileInfoMenu(tile:Tile){
+    this.sendMayorNotification("TileTest" + tile.biome)
+  }
 
   async loadDecisionInfoMenu(stateId:number){
     this.decisionContainer.position.set(this.game.app.view.width-500, this.game.app.view.height-600)
