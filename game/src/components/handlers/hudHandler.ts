@@ -16,7 +16,8 @@ class HudHandler {
   stateFood: Text;
   stateMetal: Text;
   stateHousing: Text;
-  stateFarmland: Text;
+  stateFarm: Text;
+  stateMine: Text;
   statePopulation: Text;
 
 
@@ -36,7 +37,8 @@ class HudHandler {
     this.stateFood = new Text("Placeholder Text");
     this.stateMetal = new Text("Placeholder Text");
     this.stateHousing = new Text("Placeholder Text");
-    this.stateFarmland = new Text("Placeholder Text");
+    this.stateFarm = new Text("Placeholder Text");
+    this.stateMine = new Text("Placeholder Text");
     this.statePopulation = new Text("Placeholder Text");
   }
 
@@ -54,10 +56,11 @@ class HudHandler {
     let state = Object.values(this.game.stateHandler.states)[0];
 
     this.stateName.text = "WIP Name"
-    this.stateHousing.text = "" + state.housingCount + " Housing"
-    this.stateFarmland.text = "" + state.farmlandCount + " Farmland"
-    this.statePopulation.text = "" + state.populationCount + " Population"
-    this.stateFood.text = "" + state.foodCount + " Food"
+    this.stateHousing.text = "" + state.housingUtil + " Housing"
+    this.stateFarm.text = "" + state.farmUtil + " Farms"
+    this.stateMine.text = "" + state.mineUtil + " Mines"
+    this.statePopulation.text = "" + state.population + " Population"
+    this.stateFood.text = "" + state.food + " Food"
     this.stateMetal.text = "WIP Metal"
   }
 
@@ -114,13 +117,14 @@ class HudHandler {
     let state = Object.values(this.game.stateHandler.states)[0];
 
     this.stateName.text = "WIP Name"
-    this.stateHousing.text = "" + state.housingCount + " Housing"
-    this.stateFarmland.text = "" + state.farmlandCount + " Farmland"
-    this.statePopulation.text = "" + state.populationCount + " Population"
-    this.stateFood.text = "" + state.foodCount + " Food"
-    this.stateMetal.text = "WIP Metal"
+    this.stateHousing.text = "" + state.housingUtil + " Housing"
+    this.stateFarm.text = "" + state.farmUtil + " Farm"
+    this.stateMine.text = "" + state.mineUtil + " Mines";
+    this.statePopulation.text = "" + state.population + " Population"
+    this.stateFood.text = "" + state.food + " Food"
+    this.stateMetal.text = "" + state.metal + " Metal"
 
-    let list = [this.stateName, this.stateHousing, this.stateFarmland, this.statePopulation, this.stateFood, this.stateMetal];
+    let list = [this.stateName, this.stateHousing, this.stateFarm, this.stateMine, this.statePopulation, this.stateFood, this.stateMetal];
     let y = 20;
 
     for(let i of list){

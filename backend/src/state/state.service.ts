@@ -33,10 +33,12 @@ export class StateService {
         tileIds: [tile.id],
         hexcode: hexcode,
         decisions: [],
-        farmlandCount: 0,
-        housingCount: 0,
-        populationCount: 0,
-        foodCount: 0,
+        farmUtil: 0,
+        mineUtil: 0,
+        housingUtil: 0,
+        population: 0,
+        food: 0,
+        metal: 0,
       });
       this.tileService.setStateOwner(tile.id, i, hexcode, true);
     }

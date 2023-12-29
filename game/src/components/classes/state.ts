@@ -10,12 +10,14 @@ class State {
   hexcode: number;
   game: GameHandler;
 
-  farmlandCount: number;
-  housingCount: number;
-  populationCount: number;
-  foodCount: number;
+  farmUtil: number;
+  housingUtil: number;
+  mineUtil:number;
+  population: number;
+  food: number;
+  metal: number;
 
-  constructor(id: number, capitalId: number, controllerId: number | null, tileIds:number[], hexcode:number, game: GameHandler, farmlandCount:number, housingCount:number, populationCount:number, foodCount:number) {
+  constructor(id: number, capitalId: number, controllerId: number | null, tileIds:number[], hexcode:number, game: GameHandler, farmUtil:number, housingUtil:number, mineUtil:number, population:number, food:number, metal:number) {
     this.id = id;
     this.capitalId = capitalId;
     this.controllerId = controllerId;
@@ -23,10 +25,13 @@ class State {
     this.hexcode = hexcode;
     this.game = game;
 
-    this.farmlandCount = farmlandCount;
-    this.housingCount = housingCount;
-    this.populationCount = populationCount;
-    this.foodCount = foodCount;
+    this.farmUtil = farmUtil;
+    this.mineUtil = mineUtil;
+    this.housingUtil = housingUtil;
+
+    this.population = population;
+    this.food = food;
+    this.metal = metal;
   }
 
   async getDecisionCount(){

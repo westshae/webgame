@@ -21,14 +21,20 @@ export class StateEntity {
     decisions: number[];
 
     @Column('integer')
-    housingCount: number;
+    housingUtil: number;
 
     @Column('integer')
-    farmlandCount: number;
+    farmUtil: number;
 
     @Column('integer')
-    populationCount: number;
+    mineUtil: number;
 
     @Column('integer')
-    foodCount: number;
+    population: number;
+
+    @Column('integer')
+    food: number;
+
+    @Column('integer')
+    metal: number;
 } 
