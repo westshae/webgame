@@ -21,9 +21,6 @@ export class StateEntity {
     decisions: number[];
 
     @Column('integer')
-    housingUtil: number;
-
-    @Column('integer')
     farmUtil: number;
 
     @Column('integer')

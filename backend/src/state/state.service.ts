@@ -6,6 +6,7 @@ import { TileService } from "src/tile/tile.service";
 import { StateEntity } from "./state.entity";
 import { randomInt } from "crypto";
 import { Decision } from "./decisionHandler";
+import { TileEntity } from "src/tile/tile.entity";
 
 @Injectable()
 export class StateService {
@@ -35,7 +36,6 @@ export class StateService {
         decisions: [],
         farmUtil: 10,
         mineUtil: 10,
-        housingUtil: 10,
         population: 1,
         food: 1,
         metal: 1,
@@ -54,6 +54,34 @@ export class StateService {
   }
 
   async tickStateLogic(stateId:number){
+    await this.collectStateResources(stateId);
+  }
+
+  async collectStateResources(stateId:number){
+    let entity = await this.stateRepo.findOne({id:stateId});
+    let tiles:TileEntity[] = await this.tileService.getTilesFromStateId(stateId);
+    let farmUnits = 0;
+    let mineUnits = 0;
+
+    for(let tile of tiles){
+      if(tile.biome == "Water"){
+        farmUnits += 30;
+      } else if (tile.biome == "Grass"){
+        farmUnits += 60;
+        mineUnits += 10;
+      } else if (tile.biome == "Sand"){
+        farmUnits += 10;
+        mineUnits += 30;
+      } else if (tile.biome == "Stone"){
+        farmUnits += 10;
+        mineUnits += 60;
+      }
+    }
+
+    entity.food += Math.floor(farmUnits * (entity.farmUtil/100));
+    entity.metal += Math.floor(mineUnits * (entity.mineUtil/100));
+
+    await this.stateRepo.save(entity);
   }
 
   async tickAllStateDecisions(){

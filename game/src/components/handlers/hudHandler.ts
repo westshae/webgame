@@ -15,7 +15,6 @@ class HudHandler {
   stateName: Text;
   stateFood: Text;
   stateMetal: Text;
-  stateHousing: Text;
   stateFarm: Text;
   stateMine: Text;
   statePopulation: Text;
@@ -36,7 +35,6 @@ class HudHandler {
     this.stateName = new Text("Placeholder Text");
     this.stateFood = new Text("Placeholder Text");
     this.stateMetal = new Text("Placeholder Text");
-    this.stateHousing = new Text("Placeholder Text");
     this.stateFarm = new Text("Placeholder Text");
     this.stateMine = new Text("Placeholder Text");
     this.statePopulation = new Text("Placeholder Text");
@@ -56,9 +54,8 @@ class HudHandler {
     let state = Object.values(this.game.stateHandler.states)[0];
 
     this.stateName.text = "WIP Name"
-    this.stateHousing.text = "" + state.housingUtil + " Housing"
-    this.stateFarm.text = "" + state.farmUtil + " Farms"
-    this.stateMine.text = "" + state.mineUtil + " Mines"
+    this.stateFarm.text = "" + state.farmUtil + " Farm Utilization"
+    this.stateMine.text = "" + state.mineUtil + " Mine Utilization"
     this.statePopulation.text = "" + state.population + " Population"
     this.stateFood.text = "" + state.food + " Food"
     this.stateMetal.text = "" + state.metal + " Metal"
@@ -117,14 +114,13 @@ class HudHandler {
     let state = Object.values(this.game.stateHandler.states)[0];
 
     this.stateName.text = "WIP Name"
-    this.stateHousing.text = "" + state.housingUtil + " Housing"
-    this.stateFarm.text = "" + state.farmUtil + " Farm"
-    this.stateMine.text = "" + state.mineUtil + " Mines";
+    this.stateFarm.text = "" + state.farmUtil + " Farm Utilization"
+    this.stateMine.text = "" + state.mineUtil + " Mine Utilization";
     this.statePopulation.text = "" + state.population + " Population"
     this.stateFood.text = "" + state.food + " Food"
     this.stateMetal.text = "" + state.metal + " Metal"
 
-    let list = [this.stateName, this.stateHousing, this.stateFarm, this.stateMine, this.statePopulation, this.stateFood, this.stateMetal];
+    let list = [this.stateName, this.stateFarm, this.stateMine, this.statePopulation, this.stateFood, this.stateMetal];
     let y = 20;
 
     for(let i of list){
