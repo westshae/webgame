@@ -33,12 +33,12 @@ export class StateService {
         tileIds: [tile.id],
         hexcode: hexcode,
         decisions: [],
-        farmUtil: 0,
-        mineUtil: 0,
-        housingUtil: 0,
-        population: 0,
-        food: 0,
-        metal: 0,
+        farmUtil: 10,
+        mineUtil: 10,
+        housingUtil: 10,
+        population: 1,
+        food: 1,
+        metal: 1,
       });
       this.tileService.setStateOwner(tile.id, i, hexcode, true);
     }
@@ -162,7 +162,7 @@ export class StateService {
       return;
     }
 
-    await Decision.executeKey(removedKey, entity, optionNumber);
+    await Decision.executeKey(removedKey, this, entity, optionNumber);
 
     await this.stateRepo.save(entity);
   }

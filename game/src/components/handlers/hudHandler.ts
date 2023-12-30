@@ -61,7 +61,7 @@ class HudHandler {
     this.stateMine.text = "" + state.mineUtil + " Mines"
     this.statePopulation.text = "" + state.population + " Population"
     this.stateFood.text = "" + state.food + " Food"
-    this.stateMetal.text = "WIP Metal"
+    this.stateMetal.text = "" + state.metal + " Metal"
   }
 
   sendMayorNotification(text: string){
@@ -149,11 +149,16 @@ class HudHandler {
   }
 
   async loadDecisionInfoMenu(stateId:number){
+    let decision = await this.game.stateHandler.states[stateId].getFirstDecision();
+    if(Object.keys(decision).length === 0){
+      this.sendMayorNotification("There are no decisions available right now. Please wait and try again");
+      return;
+    }
+
     this.decisionContainer.position.set(this.game.app.view.width-500, this.game.app.view.height-600)
     this.newBackground(0,0,500,600);
     this.closeButton(500);
 
-    let decision = await this.game.stateHandler.states[stateId].getFirstDecision();
 
     this.newText(0, 60, decision.question, 500);
 
@@ -163,7 +168,6 @@ class HudHandler {
           return;
         }  
         this.game.stateHandler.states[stateId].completeDecision(stateId, decision.id, i, this.game.email, this.game.jwtToken);
-        console.log(i);
         this.handleClose();
       });
     }
